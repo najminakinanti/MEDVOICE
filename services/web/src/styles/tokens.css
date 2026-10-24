@@ -1,0 +1,15 @@
+/* Token dari halaman "00 · Style Guide" pada desain Figma MedVoice. */
+:root {
+  --navy-900: #012e5e; --purple-800: #3f2a96; --purple-700: #4c33b0; --purple-600: #5b3fc8; --purple-500: #7352d9;
+  --purple-400: #9b7fe8; --purple-200: #d6cbf7; --purple-100: #eee9fc; --purple-50: #f7f5fe;
+  --ink: #0e1a2e; --muted: #5f6b80; --subtle: #8a93a6; --border: #e3e6ef; --bg: #f6f7fb; --surface: #fff;
+  --success: #12a150; --success-bg: #e3f6ea; --warning: #d97a06; --warning-bg: #fdf1dd;
+  --danger: #d93636; --danger-bg: #fbe6e6; --info: #1677d2; --info-bg: #e2effb; --teal: #0e9f9a; --teal-bg: #dff5f3;
+  --grad-brand: linear-gradient(90deg, #9b7fe8 0%, #5b3fc8 55%, #3f2a96 100%);
+  --grad-hero: linear-gradient(135deg, #012e5e 0%, #3f2a96 55%, #5b3fc8 100%);
+  --radius: 12px; --radius-sm: 8px; --radius-pill: 999px;
+  --shadow-card: 0 1px 2px rgba(14, 26, 46, 0.04);
+  --shadow-pop: 0 12px 40px rgba(14, 26, 46, 0.18);
+  --sidebar-w: 248px; --topbar-h: 68px;
+  --font: "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+}

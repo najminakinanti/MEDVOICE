@@ -1,0 +1,88 @@
+{
+ "id": "02_pasien_menyangkal",
+ "tags": [
+  "negasi"
+ ],
+ "annotated_by": "SIMULASI (belum dianotasi dokter)",
+ "segments": [
+  {
+   "speaker": "dokter",
+   "start_ms": 0,
+   "end_ms": 2000,
+   "text": "Ada demam, Bu?"
+  },
+  {
+   "speaker": "pasien",
+   "start_ms": 2000,
+   "end_ms": 4280,
+   "text": "Tidak demam, Dok. Cuma batuk dua hari."
+  },
+  {
+   "speaker": "dokter",
+   "start_ms": 4280,
+   "end_ms": 6280,
+   "text": "Nyeri dada atau sesak napas?"
+  },
+  {
+   "speaker": "pasien",
+   "start_ms": 6280,
+   "end_ms": 8620,
+   "text": "Tidak ada nyeri dada, tidak sesak juga."
+  },
+  {
+   "speaker": "dokter",
+   "start_ms": 8620,
+   "end_ms": 10620,
+   "text": "Ada alergi obat?"
+  },
+  {
+   "speaker": "pasien",
+   "start_ms": 10620,
+   "end_ms": 12620,
+   "text": "Tidak ada alergi."
+  },
+  {
+   "speaker": "dokter",
+   "start_ms": 12620,
+   "end_ms": 17000,
+   "text": "Baik, ini batuk pilek biasa. Saya beri cetirizine 10 mg satu kali sehari."
+  }
+ ],
+ "gold": [
+  {
+   "field": "keluhan_utama",
+   "key": "batuk",
+   "status": "dilaporkan_pasien",
+   "nama": null,
+   "dosis": null
+  },
+  {
+   "field": "keluhan_lain",
+   "key": "demam",
+   "status": "dinegasi",
+   "nama": null,
+   "dosis": null
+  },
+  {
+   "field": "keluhan_lain",
+   "key": "nyeri dada",
+   "status": "dinegasi",
+   "nama": null,
+   "dosis": null
+  },
+  {
+   "field": "alergi",
+   "key": "alergi",
+   "status": "dinegasi",
+   "nama": null,
+   "dosis": null
+  },
+  {
+   "field": "obat",
+   "key": "cetirizine",
+   "status": "dinyatakan_dokter",
+   "nama": "cetirizine",
+   "dosis": "10 mg"
+  }
+ ]
+}

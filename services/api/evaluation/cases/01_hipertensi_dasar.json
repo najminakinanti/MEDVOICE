@@ -1,0 +1,76 @@
+{
+ "id": "01_hipertensi_dasar",
+ "tags": [
+  "dasar"
+ ],
+ "annotated_by": "SIMULASI (belum dianotasi dokter)",
+ "segments": [
+  {
+   "speaker": "dokter",
+   "start_ms": 0,
+   "end_ms": 2640,
+   "text": "Selamat pagi, Pak. Ada keluhan apa hari ini?"
+  },
+  {
+   "speaker": "pasien",
+   "start_ms": 2640,
+   "end_ms": 5700,
+   "text": "Pagi, Dok. Kepala saya pusing sejak tiga hari lalu."
+  },
+  {
+   "speaker": "dokter",
+   "start_ms": 5700,
+   "end_ms": 9480,
+   "text": "Baik. Tekanan darah Bapak 160/100 mmHg, nadi 88 kali per menit."
+  },
+  {
+   "speaker": "dokter",
+   "start_ms": 9480,
+   "end_ms": 13800,
+   "text": "Diagnosisnya hipertensi. Saya resepkan amlodipine 5 mg satu kali sehari."
+  },
+  {
+   "speaker": "dokter",
+   "start_ms": 13800,
+   "end_ms": 16740,
+   "text": "Kurangi garam ya, Pak, dan kontrol seminggu lagi."
+  }
+ ],
+ "gold": [
+  {
+   "field": "keluhan_utama",
+   "key": "pusing",
+   "status": "dilaporkan_pasien",
+   "nama": null,
+   "dosis": null
+  },
+  {
+   "field": "tanda_vital",
+   "key": "160/100",
+   "status": "dinyatakan_dokter",
+   "nama": null,
+   "dosis": null
+  },
+  {
+   "field": "diagnosis",
+   "key": "hipertensi",
+   "status": "dinyatakan_dokter",
+   "nama": null,
+   "dosis": null
+  },
+  {
+   "field": "obat",
+   "key": "amlodipine",
+   "status": "dinyatakan_dokter",
+   "nama": "amlodipine",
+   "dosis": "5 mg"
+  },
+  {
+   "field": "edukasi",
+   "key": "garam",
+   "status": "dinyatakan_dokter",
+   "nama": null,
+   "dosis": null
+  }
+ ]
+}

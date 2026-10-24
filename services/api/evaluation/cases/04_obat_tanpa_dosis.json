@@ -1,0 +1,57 @@
+{
+ "id": "04_obat_tanpa_dosis",
+ "tags": [
+  "dosis_kosong"
+ ],
+ "annotated_by": "SIMULASI (belum dianotasi dokter)",
+ "segments": [
+  {
+   "speaker": "pasien",
+   "start_ms": 0,
+   "end_ms": 2280,
+   "text": "Saya sakit tenggorokan dan demam, Dok."
+  },
+  {
+   "speaker": "dokter",
+   "start_ms": 2280,
+   "end_ms": 6900,
+   "text": "Tenggorokan Ibu merah. Ini radang. Saya resepkan amoxicillin dan paracetamol."
+  },
+  {
+   "speaker": "dokter",
+   "start_ms": 6900,
+   "end_ms": 9000,
+   "text": "Diminum sesuai aturan di apotek ya."
+  }
+ ],
+ "gold": [
+  {
+   "field": "keluhan_utama",
+   "key": "sakit tenggorokan",
+   "status": "dilaporkan_pasien",
+   "nama": null,
+   "dosis": null
+  },
+  {
+   "field": "diagnosis",
+   "key": "radang",
+   "status": "dinyatakan_dokter",
+   "nama": null,
+   "dosis": null
+  },
+  {
+   "field": "obat",
+   "key": "amoxicillin",
+   "status": "dinyatakan_dokter",
+   "nama": "amoxicillin",
+   "dosis": null
+  },
+  {
+   "field": "obat",
+   "key": "paracetamol",
+   "status": "dinyatakan_dokter",
+   "nama": "paracetamol",
+   "dosis": null
+  }
+ ]
+}

@@ -1,0 +1,54 @@
+Dokter: Selamat siang, Pak Hendra. Silakan duduk. Gimana kabarnya?
+Pasien: Siang, Dok. Ya beginilah, Dok. Ini saya mau kontrol, tapi sekalian ada keluhan baru.
+Dokter: Oh iya, silakan. Keluhan barunya apa?
+Pasien: Ulu hati saya ini perih, Dok, sudah hampir dua minggu. Kayak ditusuk-tusuk gitu, terutama kalau perut kosong, sebelum makan.
+Dokter: Perihnya hilang kalau makan?
+Pasien: Iya, Dok, agak reda kalau sudah makan. Tapi nggak lama, nanti perih lagi.
+Dokter: Ada mual atau muntah?
+Pasien: Mual iya, Dok, kadang. Muntah nggak ada.
+Dokter: Pernah muntah darah, atau BAB-nya hitam seperti aspal?
+Pasien: Nggak, Dok. BAB saya normal, warnanya cokelat biasa.
+Dokter: Nyeri dada, sesak napas, atau keringat dingin?
+Pasien: Nggak ada, Dok. Cuma di ulu hati ini aja.
+Dokter: Berat badan turun akhir-akhir ini?
+Pasien: Nggak, Dok, malah naik sedikit.
+Dokter: Makannya gimana? Pedas, kopi, atau teh?
+Pasien: Wah, kopi saya banyak, Dok. Sehari bisa tiga gelas. Pedas juga suka.
+Dokter: Merokok?
+Pasien: Sudah berhenti lima tahun lalu, Dok.
+Dokter: Bagus. Obat rutin yang diminum sekarang apa saja, Pak?
+Pasien: Metformin yang lima ratus itu, dua kali sehari. Sama amlodipine yang lima miligram, pagi hari.
+Dokter: Ada obat lain? Jamu, obat warung, obat pegal?
+Pasien: Hmm, anu, saya sering minum obat pegal linu dari warung, Dok. Soalnya lutut saya suka sakit. Hampir tiap hari, kalau lagi kambuh.
+Dokter: Namanya apa obatnya?
+Pasien: Aduh, saya lupa, Dok. Bungkusnya warna biru. Nanti saya bawa bungkusnya.
+Dokter: Baik. Ada alergi obat, Pak?
+Pasien: Alergi obat nggak ada, Dok. Tapi kalau makan udang, saya bentol-bentol, gatal.
+Dokter: Oke, alergi udang saya catat ya. Kapan terakhir cek gula?
+Pasien: Kemarin pagi di rumah, Dok, seratus tiga puluh. Tapi itu puasa.
+Dokter: Baik. Sekarang saya periksa ya. Tolong berbaring. Tekanan darah Bapak 145 per 90, nadi 80 kali per menit, suhu 36,6 derajat, napas 18 kali per menit.
+Pasien: Tinggi dikit ya, Dok?
+Dokter: Sedikit di atas target. Saya cek gula darah sewaktu ya, Pak. Hasilnya 186 mg/dL.
+Dokter: Sekarang perutnya saya periksa. Kalau ditekan di sini sakit?
+Pasien: Aduh, iya, Dok, di situ sakit.
+Dokter: Di ulu hati ada nyeri tekan. Di bagian lain nggak sakit, nggak ada nyeri lepas, nggak keras. Bising usus normal.
+Dokter: Paru-parunya saya dengar, bersih, nggak ada suara tambahan. Jantungnya irama teratur.
+Pasien: Jadi saya kenapa, Dok?
+Dokter: Dari keluhan dan pemeriksaan, diagnosisnya dispepsia. Saya curiga ada peradangan atau luka di lambung, kemungkinan karena obat pegal yang Bapak minum itu. Tapi ini baru dugaan, belum bisa saya pastikan.
+Pasien: Oh, jadi karena obat pegal ya, Dok?
+Dokter: Bisa jadi. Obat pegal warung itu sering mengandung obat yang mengiritasi lambung. Mulai hari ini jangan diminum dulu ya, Pak.
+Pasien: Iya, Dok. Terus lutut saya gimana kalau sakit?
+Dokter: Untuk lutut, kalau sakit boleh paracetamol 500 mg, maksimal tiga kali sehari. Jangan obat pegal yang tadi.
+Dokter: Untuk lambungnya, saya resepkan omeprazole 20 mg, satu kali sehari, diminum pagi sebelum makan, selama 14 hari. Ditambah sirup antasida, satu sendok makan, tiga kali sehari, sebelum makan.
+Pasien: Metformin sama amlodipine tetap lanjut, Dok?
+Dokter: Tetap lanjut. Metformin 500 mg dua kali sehari sesudah makan, amlodipine 5 mg satu kali sehari pagi.
+Dokter: Tekanan darahnya masih 145, jadi minggu depan kita evaluasi lagi, belum kita naikkan dosisnya.
+Dokter: Nanti kita cek HbA1c dan darah lengkap ya, Pak. Bapak ke lab dulu sebelum kontrol.
+Pasien: Nggak perlu dipasang selang ke lambung itu, Dok? Yang endoskopi?
+Dokter: Belum, Pak. Kalau dua minggu minum obat keluhannya nggak membaik, atau ada BAB hitam atau muntah darah, baru kita pertimbangkan endoskopi.
+Dokter: Pola makannya diatur ya. Kurangi kopi dan pedas, makan sedikit tapi sering, dan jangan langsung tidur setelah makan.
+Pasien: Baik, Dok.
+Dokter: Kalau BAB hitam, muntah darah, atau perih makin hebat, langsung ke IGD, jangan nunggu kontrol.
+Pasien: Siap, Dok. Kontrolnya kapan?
+Dokter: Dua minggu lagi ya, Pak. Bawa hasil lab dan bungkus obat pegalnya.
+Pasien: Terima kasih, Dok.

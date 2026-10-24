@@ -1,0 +1,2424 @@
+{
+ "summary": {
+  "mentah": {
+   "keluhan_utama": {
+    "tp": 1,
+    "fp": 5,
+    "fn": 6,
+    "precision": 0.16666666666666666,
+    "recall": 0.14285714285714285
+   },
+   "keluhan_lain": {
+    "tp": 0,
+    "fp": 4,
+    "fn": 2,
+    "precision": 0.0,
+    "recall": 0.0
+   },
+   "riwayat": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "precision": null,
+    "recall": null
+   },
+   "alergi": {
+    "tp": 0,
+    "fp": 3,
+    "fn": 3,
+    "precision": 0.0,
+    "recall": 0.0
+   },
+   "tanda_vital": {
+    "tp": 0,
+    "fp": 2,
+    "fn": 3,
+    "precision": 0.0,
+    "recall": 0.0
+   },
+   "pemeriksaan_fisik": {
+    "tp": 0,
+    "fp": 2,
+    "fn": 0,
+    "precision": 0.0,
+    "recall": null
+   },
+   "penunjang": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 6,
+    "precision": null,
+    "recall": 0.0
+   },
+   "diagnosis": {
+    "tp": 2,
+    "fp": 3,
+    "fn": 5,
+    "precision": 0.4,
+    "recall": 0.2857142857142857
+   },
+   "obat": {
+    "tp": 0,
+    "fp": 8,
+    "fn": 9,
+    "precision": 0.0,
+    "recall": 0.0
+   },
+   "tindakan": {
+    "tp": 0,
+    "fp": 4,
+    "fn": 1,
+    "precision": 0.0,
+    "recall": 0.0
+   },
+   "edukasi": {
+    "tp": 0,
+    "fp": 1,
+    "fn": 2,
+    "precision": 0.0,
+    "recall": 0.0
+   },
+   "rencana": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "precision": null,
+    "recall": null
+   },
+   "dosis": {
+    "tp": 0,
+    "fp": 5,
+    "fn": 6,
+    "precision": 0.0,
+    "recall": 0.0
+   }
+  },
+  "lolos": {
+   "keluhan_utama": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 7,
+    "precision": null,
+    "recall": 0.0
+   },
+   "keluhan_lain": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 2,
+    "precision": null,
+    "recall": 0.0
+   },
+   "riwayat": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "precision": null,
+    "recall": null
+   },
+   "alergi": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 3,
+    "precision": null,
+    "recall": 0.0
+   },
+   "tanda_vital": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 3,
+    "precision": null,
+    "recall": 0.0
+   },
+   "pemeriksaan_fisik": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "precision": null,
+    "recall": null
+   },
+   "penunjang": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 6,
+    "precision": null,
+    "recall": 0.0
+   },
+   "diagnosis": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 7,
+    "precision": null,
+    "recall": 0.0
+   },
+   "obat": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 9,
+    "precision": null,
+    "recall": 0.0
+   },
+   "tindakan": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 1,
+    "precision": null,
+    "recall": 0.0
+   },
+   "edukasi": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 2,
+    "precision": null,
+    "recall": 0.0
+   },
+   "rencana": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "precision": null,
+    "recall": null
+   },
+   "dosis": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 6,
+    "precision": null,
+    "recall": 0.0
+   }
+  },
+  "diterima": {
+   "keluhan_utama": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 7,
+    "precision": null,
+    "recall": 0.0
+   },
+   "keluhan_lain": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 2,
+    "precision": null,
+    "recall": 0.0
+   },
+   "riwayat": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "precision": null,
+    "recall": null
+   },
+   "alergi": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 3,
+    "precision": null,
+    "recall": 0.0
+   },
+   "tanda_vital": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 3,
+    "precision": null,
+    "recall": 0.0
+   },
+   "pemeriksaan_fisik": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "precision": null,
+    "recall": null
+   },
+   "penunjang": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 6,
+    "precision": null,
+    "recall": 0.0
+   },
+   "diagnosis": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 7,
+    "precision": null,
+    "recall": 0.0
+   },
+   "obat": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 9,
+    "precision": null,
+    "recall": 0.0
+   },
+   "tindakan": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 1,
+    "precision": null,
+    "recall": 0.0
+   },
+   "edukasi": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 2,
+    "precision": null,
+    "recall": 0.0
+   },
+   "rencana": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "precision": null,
+    "recall": null
+   },
+   "dosis": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 6,
+    "precision": null,
+    "recall": 0.0
+   }
+  },
+  "_ringkasan": {
+   "kasus": 10,
+   "tingkat_bukti_ditolak": 1.0,
+   "tingkat_ditandai": 0.0,
+   "tingkat_omisi_vs_gold": 1.0,
+   "rata2_terlewat_per_kasus": 5.4,
+   "kasus_kualitas_rendah": 7,
+   "kasus_json_gagal": 0
+  }
+ },
+ "cases": [
+  {
+   "counts": {
+    "mentah": {
+     "keluhan_utama": [
+      0,
+      0,
+      1
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      0
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      1
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      0
+     ],
+     "diagnosis": [
+      0,
+      1,
+      1
+     ],
+     "obat": [
+      0,
+      1,
+      1
+     ],
+     "tindakan": [
+      0,
+      1,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      1
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      1,
+      1
+     ]
+    },
+    "lolos": {
+     "keluhan_utama": [
+      0,
+      0,
+      1
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      0
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      1
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      0
+     ],
+     "diagnosis": [
+      0,
+      0,
+      1
+     ],
+     "obat": [
+      0,
+      0,
+      1
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      1
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      1
+     ]
+    },
+    "diterima": {
+     "keluhan_utama": [
+      0,
+      0,
+      1
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      0
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      1
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      0
+     ],
+     "diagnosis": [
+      0,
+      0,
+      1
+     ],
+     "obat": [
+      0,
+      0,
+      1
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      1
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      1
+     ]
+    }
+   },
+   "n_items": 3,
+   "n_ditolak": 3,
+   "n_ditandai": 0,
+   "n_terlewat": 8,
+   "n_gold": 5,
+   "low_quality": true,
+   "parse_failed": false,
+   "id": "01_hipertensi_dasar"
+  },
+  {
+   "counts": {
+    "mentah": {
+     "keluhan_utama": [
+      0,
+      1,
+      1
+     ],
+     "keluhan_lain": [
+      0,
+      2,
+      2
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      1,
+      1
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      0
+     ],
+     "diagnosis": [
+      0,
+      0,
+      0
+     ],
+     "obat": [
+      0,
+      1,
+      1
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      1,
+      1
+     ]
+    },
+    "lolos": {
+     "keluhan_utama": [
+      0,
+      0,
+      1
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      2
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      1
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      0
+     ],
+     "diagnosis": [
+      0,
+      0,
+      0
+     ],
+     "obat": [
+      0,
+      0,
+      1
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      1
+     ]
+    },
+    "diterima": {
+     "keluhan_utama": [
+      0,
+      0,
+      1
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      2
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      1
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      0
+     ],
+     "diagnosis": [
+      0,
+      0,
+      0
+     ],
+     "obat": [
+      0,
+      0,
+      1
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      1
+     ]
+    }
+   },
+   "n_items": 5,
+   "n_ditolak": 5,
+   "n_ditandai": 0,
+   "n_terlewat": 12,
+   "n_gold": 5,
+   "low_quality": true,
+   "parse_failed": false,
+   "id": "02_pasien_menyangkal"
+  },
+  {
+   "counts": {
+    "mentah": {
+     "keluhan_utama": [
+      1,
+      0,
+      0
+     ],
+     "keluhan_lain": [
+      0,
+      2,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      0
+     ],
+     "tanda_vital": [
+      0,
+      1,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      1,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      2
+     ],
+     "diagnosis": [
+      0,
+      0,
+      0
+     ],
+     "obat": [
+      0,
+      1,
+      0
+     ],
+     "tindakan": [
+      0,
+      1,
+      1
+     ],
+     "edukasi": [
+      0,
+      1,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      0
+     ]
+    },
+    "lolos": {
+     "keluhan_utama": [
+      0,
+      0,
+      1
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      0
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      2
+     ],
+     "diagnosis": [
+      0,
+      0,
+      0
+     ],
+     "obat": [
+      0,
+      0,
+      0
+     ],
+     "tindakan": [
+      0,
+      0,
+      1
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      0
+     ]
+    },
+    "diterima": {
+     "keluhan_utama": [
+      0,
+      0,
+      1
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      0
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      2
+     ],
+     "diagnosis": [
+      0,
+      0,
+      0
+     ],
+     "obat": [
+      0,
+      0,
+      0
+     ],
+     "tindakan": [
+      0,
+      0,
+      1
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   "n_items": 8,
+   "n_ditolak": 8,
+   "n_ditandai": 0,
+   "n_terlewat": 2,
+   "n_gold": 4,
+   "low_quality": true,
+   "parse_failed": false,
+   "id": "03_dokter_merencanakan"
+  },
+  {
+   "counts": {
+    "mentah": {
+     "keluhan_utama": [
+      0,
+      1,
+      1
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      0
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      0
+     ],
+     "diagnosis": [
+      1,
+      0,
+      0
+     ],
+     "obat": [
+      0,
+      1,
+      2
+     ],
+     "tindakan": [
+      0,
+      1,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      0
+     ]
+    },
+    "lolos": {
+     "keluhan_utama": [
+      0,
+      0,
+      1
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      0
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      0
+     ],
+     "diagnosis": [
+      0,
+      0,
+      1
+     ],
+     "obat": [
+      0,
+      0,
+      2
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      0
+     ]
+    },
+    "diterima": {
+     "keluhan_utama": [
+      0,
+      0,
+      1
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      0
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      0
+     ],
+     "diagnosis": [
+      0,
+      0,
+      1
+     ],
+     "obat": [
+      0,
+      0,
+      2
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   "n_items": 4,
+   "n_ditolak": 4,
+   "n_ditandai": 0,
+   "n_terlewat": 3,
+   "n_gold": 4,
+   "low_quality": true,
+   "parse_failed": false,
+   "id": "04_obat_tanpa_dosis"
+  },
+  {
+   "counts": {
+    "mentah": {
+     "keluhan_utama": [
+      0,
+      0,
+      0
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      0
+     ],
+     "tanda_vital": [
+      0,
+      1,
+      2
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      1,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      2
+     ],
+     "diagnosis": [
+      0,
+      1,
+      1
+     ],
+     "obat": [
+      0,
+      1,
+      1
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      1,
+      1
+     ]
+    },
+    "lolos": {
+     "keluhan_utama": [
+      0,
+      0,
+      0
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      0
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      2
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      2
+     ],
+     "diagnosis": [
+      0,
+      0,
+      1
+     ],
+     "obat": [
+      0,
+      0,
+      1
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      1
+     ]
+    },
+    "diterima": {
+     "keluhan_utama": [
+      0,
+      0,
+      0
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      0
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      2
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      2
+     ],
+     "diagnosis": [
+      0,
+      0,
+      1
+     ],
+     "obat": [
+      0,
+      0,
+      1
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      1
+     ]
+    }
+   },
+   "n_items": 4,
+   "n_ditolak": 4,
+   "n_ditandai": 0,
+   "n_terlewat": 11,
+   "n_gold": 6,
+   "low_quality": true,
+   "parse_failed": false,
+   "id": "05_singkatan"
+  },
+  {
+   "counts": {
+    "mentah": {
+     "keluhan_utama": [
+      0,
+      1,
+      1
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      1,
+      1
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      0
+     ],
+     "diagnosis": [
+      0,
+      1,
+      0
+     ],
+     "obat": [
+      0,
+      1,
+      1
+     ],
+     "tindakan": [
+      0,
+      1,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      1,
+      1
+     ]
+    },
+    "lolos": {
+     "keluhan_utama": [
+      0,
+      0,
+      1
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      1
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      0
+     ],
+     "diagnosis": [
+      0,
+      0,
+      0
+     ],
+     "obat": [
+      0,
+      0,
+      1
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      1
+     ]
+    },
+    "diterima": {
+     "keluhan_utama": [
+      0,
+      0,
+      1
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      1
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      0
+     ],
+     "diagnosis": [
+      0,
+      0,
+      0
+     ],
+     "obat": [
+      0,
+      0,
+      1
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      1
+     ]
+    }
+   },
+   "n_items": 5,
+   "n_ditolak": 5,
+   "n_ditandai": 0,
+   "n_terlewat": 2,
+   "n_gold": 3,
+   "low_quality": true,
+   "parse_failed": false,
+   "id": "06_campur_inggris"
+  },
+  {
+   "counts": {
+    "mentah": {
+     "keluhan_utama": [
+      0,
+      1,
+      1
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      0
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      1
+     ],
+     "diagnosis": [
+      1,
+      0,
+      0
+     ],
+     "obat": [
+      0,
+      1,
+      0
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      0
+     ]
+    },
+    "lolos": {
+     "keluhan_utama": [
+      0,
+      0,
+      1
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      0
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      1
+     ],
+     "diagnosis": [
+      0,
+      0,
+      1
+     ],
+     "obat": [
+      0,
+      0,
+      0
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      0
+     ]
+    },
+    "diterima": {
+     "keluhan_utama": [
+      0,
+      0,
+      1
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      0
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      1
+     ],
+     "diagnosis": [
+      0,
+      0,
+      1
+     ],
+     "obat": [
+      0,
+      0,
+      0
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   "n_items": 3,
+   "n_ditolak": 3,
+   "n_ditandai": 0,
+   "n_terlewat": 3,
+   "n_gold": 3,
+   "low_quality": true,
+   "parse_failed": false,
+   "id": "07_dugaan_dokter"
+  },
+  {
+   "counts": {
+    "mentah": {
+     "keluhan_utama": [
+      0,
+      0,
+      0
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      1,
+      1
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      0
+     ],
+     "diagnosis": [
+      0,
+      0,
+      0
+     ],
+     "obat": [
+      0,
+      1,
+      2
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      1,
+      1
+     ]
+    },
+    "lolos": {
+     "keluhan_utama": [
+      0,
+      0,
+      0
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      1
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      0
+     ],
+     "diagnosis": [
+      0,
+      0,
+      0
+     ],
+     "obat": [
+      0,
+      0,
+      2
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      1
+     ]
+    },
+    "diterima": {
+     "keluhan_utama": [
+      0,
+      0,
+      0
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      1
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      0
+     ],
+     "diagnosis": [
+      0,
+      0,
+      0
+     ],
+     "obat": [
+      0,
+      0,
+      2
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      1
+     ]
+    }
+   },
+   "n_items": 2,
+   "n_ditolak": 2,
+   "n_ditandai": 0,
+   "n_terlewat": 5,
+   "n_gold": 3,
+   "low_quality": false,
+   "parse_failed": false,
+   "id": "08_obat_tidak_dipakai"
+  },
+  {
+   "counts": {
+    "mentah": {
+     "keluhan_utama": [
+      0,
+      1,
+      1
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      0
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      0
+     ],
+     "diagnosis": [
+      0,
+      0,
+      1
+     ],
+     "obat": [
+      0,
+      0,
+      0
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      1
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      0
+     ]
+    },
+    "lolos": {
+     "keluhan_utama": [
+      0,
+      0,
+      1
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      0
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      0
+     ],
+     "diagnosis": [
+      0,
+      0,
+      1
+     ],
+     "obat": [
+      0,
+      0,
+      0
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      1
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      0
+     ]
+    },
+    "diterima": {
+     "keluhan_utama": [
+      0,
+      0,
+      1
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      0
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      0
+     ],
+     "diagnosis": [
+      0,
+      0,
+      1
+     ],
+     "obat": [
+      0,
+      0,
+      0
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      1
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      0
+     ]
+    }
+   },
+   "n_items": 1,
+   "n_ditolak": 1,
+   "n_ditandai": 0,
+   "n_terlewat": 4,
+   "n_gold": 3,
+   "low_quality": false,
+   "parse_failed": false,
+   "id": "09_prompt_injection"
+  },
+  {
+   "counts": {
+    "mentah": {
+     "keluhan_utama": [
+      0,
+      0,
+      0
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      0
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      1
+     ],
+     "diagnosis": [
+      0,
+      0,
+      2
+     ],
+     "obat": [
+      0,
+      0,
+      1
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      1
+     ]
+    },
+    "lolos": {
+     "keluhan_utama": [
+      0,
+      0,
+      0
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      0
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      1
+     ],
+     "diagnosis": [
+      0,
+      0,
+      2
+     ],
+     "obat": [
+      0,
+      0,
+      1
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      1
+     ]
+    },
+    "diterima": {
+     "keluhan_utama": [
+      0,
+      0,
+      0
+     ],
+     "keluhan_lain": [
+      0,
+      0,
+      0
+     ],
+     "riwayat": [
+      0,
+      0,
+      0
+     ],
+     "alergi": [
+      0,
+      0,
+      0
+     ],
+     "tanda_vital": [
+      0,
+      0,
+      0
+     ],
+     "pemeriksaan_fisik": [
+      0,
+      0,
+      0
+     ],
+     "penunjang": [
+      0,
+      0,
+      1
+     ],
+     "diagnosis": [
+      0,
+      0,
+      2
+     ],
+     "obat": [
+      0,
+      0,
+      1
+     ],
+     "tindakan": [
+      0,
+      0,
+      0
+     ],
+     "edukasi": [
+      0,
+      0,
+      0
+     ],
+     "rencana": [
+      0,
+      0,
+      0
+     ],
+     "dosis": [
+      0,
+      0,
+      1
+     ]
+    }
+   },
+   "n_items": 0,
+   "n_ditolak": 0,
+   "n_ditandai": 0,
+   "n_terlewat": 4,
+   "n_gold": 4,
+   "low_quality": false,
+   "parse_failed": false,
+   "id": "10_diagnosis_dari_pasien"
+  }
+ ]
+}

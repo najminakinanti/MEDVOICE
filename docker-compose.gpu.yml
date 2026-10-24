@@ -1,0 +1,10 @@
+# Override GPU NVIDIA untuk LLM/embedding (Ollama):
+#   docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d
+# STT TETAP di CPU (VRAM 4 GB dipakai LLM). STT di GPU: lihat docker-compose.gpu-stt.yml.
+# Butuh Docker Desktop + WSL2 + driver NVIDIA (atau NVIDIA Container Toolkit di Linux).
+services:
+  ollama:
+    deploy:
+      resources:
+        reservations:
+          devices: [{driver: nvidia, count: all, capabilities: [gpu]}]

@@ -1,0 +1,63 @@
+{
+ "id": "06_campur_inggris",
+ "tags": [
+  "inggris"
+ ],
+ "annotated_by": "SIMULASI (belum dianotasi dokter)",
+ "segments": [
+  {
+   "speaker": "pasien",
+   "start_ms": 0,
+   "end_ms": 2880,
+   "text": "Dok, pain scale saya sekitar 6, di bagian perut."
+  },
+  {
+   "speaker": "dokter",
+   "start_ms": 2880,
+   "end_ms": 4880,
+   "text": "Okay. Any allergy to medication?"
+  },
+  {
+   "speaker": "pasien",
+   "start_ms": 4880,
+   "end_ms": 6880,
+   "text": "No allergy, Dok."
+  },
+  {
+   "speaker": "dokter",
+   "start_ms": 6880,
+   "end_ms": 11080,
+   "text": "Baik, we'll start omeprazole 20 mg once daily. Tidak perlu rawat inap."
+  }
+ ],
+ "gold": [
+  {
+   "field": "keluhan_utama",
+   "key": [
+    "nyeri",
+    "pain",
+    "sakit"
+   ],
+   "status": "dilaporkan_pasien",
+   "nama": null,
+   "dosis": null
+  },
+  {
+   "field": "alergi",
+   "key": [
+    "allergy",
+    "alergi"
+   ],
+   "status": "dinegasi",
+   "nama": null,
+   "dosis": null
+  },
+  {
+   "field": "obat",
+   "key": "omeprazole",
+   "status": "dinyatakan_dokter",
+   "nama": "omeprazole",
+   "dosis": "20 mg"
+  }
+ ]
+}

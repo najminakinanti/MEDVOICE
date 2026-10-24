@@ -1,0 +1,13 @@
+# OPSIONAL: STT di GPU (butuh VRAM tambahan; di GPU 4 GB akan bersaing dengan LLM).
+# Wajib: STT_BUILD_GPU=1 di .env, lalu  docker compose build stt  sebelum memakai file ini:
+#   docker compose -f docker-compose.yml -f docker-compose.gpu.yml -f docker-compose.gpu-stt.yml up -d stt
+services:
+  stt:
+    environment:
+      STT_DEVICE: cuda
+      STT_COMPUTE_TYPE: int8_float16
+      STT_IDLE_UNLOAD_S: "25"
+    deploy:
+      resources:
+        reservations:
+          devices: [{driver: nvidia, count: all, capabilities: [gpu]}]

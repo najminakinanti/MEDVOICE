@@ -1,0 +1,36 @@
+# Rahasia & konfigurasi lokal
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+
+# Node / frontend (services/web)
+node_modules/
+services/web/dist/
+*.tsbuildinfo
+npm-debug.log*
+# Hasil build UI (services/api/app/static) SENGAJA tidak diabaikan: image Docker api menyalinnya tanpa tahap Node.
+# Bila build UI dipindah ke CI/Dockerfile multi-stage, tambahkan:  services/api/app/static/
+
+# Data & artefak lokal (jangan masuk repo: data klinis/tabel besar/rekaman/model)
+data/
+models/
+.local/
+shots/
+*.log
+*.wav.tmp
+
+# Editor & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

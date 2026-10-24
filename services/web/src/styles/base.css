@@ -1,0 +1,76 @@
+*, *::before, *::after { box-sizing: border-box; }
+html, body, #app { height: 100%; }
+body { margin: 0; font: 400 14px/1.5 var(--font); color: var(--ink); background: var(--bg); -webkit-font-smoothing: antialiased; }
+h1, h2, h3, p { margin: 0; }
+button { font: inherit; color: inherit; cursor: pointer; }
+input, select, textarea { font: inherit; color: inherit; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--purple-500); outline-offset: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.hidden { display: none !important; }
+
+.display { font-size: 32px; font-weight: 700; color: var(--navy-900); }
+.h1 { font-size: 20px; font-weight: 700; color: var(--navy-900); line-height: 1.2; }
+.h2 { font-size: 16px; font-weight: 700; color: var(--ink); }
+.caption { font-size: 12px; font-weight: 500; color: var(--muted); }
+.muted { color: var(--muted); }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-card); }
+
+/* Tombol (Style Guide: Mulai Rekam / Kirim ke SIMRS / Batal / Buat Ulang SOAP / Stop) */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--surface); font-weight: 600; font-size: 14px; white-space: nowrap; transition: background .12s, opacity .12s, transform .05s; }
+.btn:hover:not(:disabled) { background: var(--bg); }
+.btn:active:not(:disabled) { transform: translateY(1px); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.btn svg { flex: none; }
+.btn-primary { background: var(--purple-600); border-color: var(--purple-600); color: #fff; }
+.btn-primary:hover:not(:disabled) { background: var(--purple-700); }
+.btn-navy { background: var(--navy-900); border-color: var(--navy-900); color: #fff; }
+.btn-navy:hover:not(:disabled) { background: #01234a; }
+.btn-soft { background: var(--purple-100); border-color: var(--purple-100); color: var(--purple-600); }
+.btn-soft:hover:not(:disabled) { background: var(--purple-200); }
+.btn-danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+.btn-danger:hover:not(:disabled) { background: #c02b2b; }
+.btn-sm { height: 32px; padding: 0 12px; font-size: 13px; }
+.btn-lg { height: 48px; font-size: 15px; }
+.btn-block { width: 100%; }
+
+/* Pil status (Style Guide: Menunggu, Merekam, Draft AI, Perlu review, Disetujui, Terkirim, Klinis) */
+.pill { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 600; background: var(--bg); color: var(--muted); white-space: nowrap; }
+.pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.pill.nodot::before { display: none; }
+.pill-danger { background: var(--danger-bg); color: var(--danger); }
+.pill-purple { background: var(--purple-100); color: var(--purple-600); }
+.pill-warning { background: var(--warning-bg); color: var(--warning); }
+.pill-success { background: var(--success-bg); color: var(--success); }
+.pill-info { background: var(--info-bg); color: var(--info); }
+.pill-teal { background: var(--teal-bg); color: var(--teal); }
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label, .label { font-size: 13px; font-weight: 600; }
+.input { height: 44px; width: 100%; padding: 0 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); outline: none; transition: border-color .12s, box-shadow .12s; }
+.input:focus { border-color: var(--purple-500); box-shadow: 0 0 0 3px var(--purple-100); }
+
+.chip { display: inline-flex; align-items: center; height: 30px; padding: 0 14px; border-radius: var(--radius-pill); border: 1px solid var(--border); background: var(--surface); font-size: 13px; cursor: pointer; }
+.chip.active { background: var(--navy-900); border-color: var(--navy-900); color: #fff; font-weight: 600; }
+
+.avatar { flex: none; display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--purple-100); color: var(--purple-600); font-size: 11px; font-weight: 700; }
+.avatar.dr { background: var(--navy-900); color: #fff; }
+.avatar.ps { background: var(--teal-bg); color: var(--teal); }
+.avatar.lg { width: 36px; height: 36px; font-size: 12px; }
+
+.check { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.check input { appearance: none; flex: none; width: 20px; height: 20px; border: 1.5px solid var(--border); border-radius: 6px; background: var(--surface) center/14px no-repeat; transition: .12s; cursor: pointer; }
+.check input:checked { background-color: var(--purple-600); border-color: var(--purple-600);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E"); }
+
+.banner { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: var(--radius-sm); background: var(--warning-bg); color: #7a4300; font-size: 13px; }
+.banner.bad { background: var(--danger-bg); color: #8f1d1d; }
+.banner.info { background: var(--purple-50); color: var(--purple-700); }
+
+.spinner { width: 18px; height: 18px; border-radius: 50%; border: 2.5px solid var(--purple-200); border-top-color: var(--purple-600); animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+@media print { .no-print { display: none !important; } body { background: #fff; } }

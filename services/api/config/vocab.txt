@@ -1,0 +1,36 @@
+hipertensi
+diabetes melitus
+tekanan darah
+gula darah sewaktu
+GDS
+CBC
+hemoglobin
+leukosit
+trombosit
+kolesterol
+asam urat
+demam
+batuk
+pilek
+sesak napas
+nyeri dada
+nyeri perut
+mual
+muntah
+diare
+pusing
+sakit kepala
+alergi
+EKG
+rontgen thorax
+USG
+infus
+nebulizer
+saturasi oksigen
+SpO2
+nadi
+suhu
+frekuensi napas
+TD
+HR
+RR

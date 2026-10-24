@@ -1,0 +1,106 @@
+# Dev CPU: docker compose up -d. GPU: tambahkan -f docker-compose.gpu.yml.
+# Semua port hanya di-bind ke 127.0.0.1. Akses dari luar lewat reverse proxy TLS/VPN (lihat README).
+name: medvoice
+
+services:
+  postgres:
+    image: ${POSTGRES_IMAGE}
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:${POSTGRES_HOST_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  redis:
+    image: ${REDIS_IMAGE}
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}", "--appendonly", "yes"]
+    volumes:
+      - redisdata:/data
+    ports:
+      - "127.0.0.1:6379:6379"
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a ${REDIS_PASSWORD} ping | grep PONG"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  ollama:
+    image: ${OLLAMA_IMAGE}
+    environment:
+      OLLAMA_MAX_LOADED_MODELS: "2"     # LLM + embedding bersamaan
+      OLLAMA_KEEP_ALIVE: "30m"
+    volumes:
+      - ollama:/root/.ollama
+    ports:
+      - "127.0.0.1:11434:11434"   # hanya localhost
+    restart: unless-stopped
+
+  stt:
+    build:
+      context: ./services/stt
+      args:
+        GPU: ${STT_BUILD_GPU:-0}
+    environment:
+      STT_MODEL: ${STT_MODEL}
+      STT_LIVE_MODEL: ${STT_LIVE_MODEL:-base}
+      STT_REFINE_MODEL: ${STT_REFINE_MODEL:-small}
+      STT_PARTIAL_MODEL: ${STT_PARTIAL_MODEL:-base}
+      STT_STREAM_FINAL_MODEL: ${STT_STREAM_FINAL_MODEL:-}
+      STT_STREAM_FINAL_BEAM: ${STT_STREAM_FINAL_BEAM:-1}
+      STT_LANGUAGE: ${STT_LANGUAGE:-id}
+      STT_IDLE_UNLOAD_S: ${STT_IDLE_UNLOAD_S:-0}
+      STT_COMPUTE_TYPE: ${STT_COMPUTE_TYPE}
+      STT_DEVICE: ${STT_DEVICE}
+    volumes:
+      - sttmodels:/models
+    expose:
+      - "9000"
+    restart: unless-stopped
+
+  api:
+    build: ./services/api
+    env_file: .env
+    volumes:
+      - audio:/audio
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    ports:
+      - "127.0.0.1:8000:8000"
+    restart: unless-stopped
+
+  worker:
+    build: ./services/api
+    env_file: .env
+    command: ["celery", "-A", "app.worker.celery", "worker", "--loglevel=WARNING", "--concurrency=${WORKER_CONCURRENCY:-2}", "-B"]
+    volumes:
+      - audio:/audio
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    restart: unless-stopped
+
+  migrate:
+    build: ./services/api
+    env_file: .env
+    command: ["alembic", "upgrade", "head"]
+    depends_on:
+      postgres: {condition: service_healthy}
+    profiles: ["tools"]
+
+volumes:
+  pgdata:
+  redisdata:
+  ollama:
+  sttmodels:
+  audio:

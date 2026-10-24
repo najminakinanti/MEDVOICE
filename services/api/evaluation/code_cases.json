@@ -1,0 +1,18 @@
+{
+  "_catatan": "KASUS SIMULASI. 'expected' diisi pengembang dan hanya diverifikasi terhadap teks tabel WHO ICD-10 2019; WAJIB dikoreksi koder RS sebelum dipakai untuk keputusan. expected=null berarti belum dianotasi (tidak dihitung akurasinya).",
+  "cases": [
+    {"term": "hipertensi", "evidence": "Diagnosisnya hipertensi", "expected": "I10"},
+    {"term": "hipertensi esensial", "evidence": "ini hipertensi esensial", "expected": "I10"},
+    {"term": "infeksi saluran kemih", "evidence": "diagnosisnya infeksi saluran kemih", "expected": "N39.0"},
+    {"term": "dispepsia", "evidence": "Diagnosis: dispepsia", "expected": "K30"},
+    {"term": "gastritis", "evidence": "ini gastritis", "expected": "K29.7"},
+    {"term": "ISPA", "evidence": "diagnosisnya ISPA", "expected": "J06.9"},
+    {"term": "pneumonia", "evidence": "ini pneumonia", "expected": "J18.9"},
+    {"term": "diabetes melitus tipe 2 tanpa komplikasi", "evidence": "diabetes melitus tipe 2 tanpa komplikasi", "expected": "E11.9"},
+    {"term": "demam", "evidence": "diagnosisnya demam", "expected": "R50.9"},
+    {"term": "asma", "evidence": "ini asma", "expected": null},
+    {"term": "diare akut", "evidence": "diagnosisnya diare akut", "expected": null},
+    {"term": "faringitis", "evidence": "ini faringitis", "expected": null},
+    {"term": "tidak enak badan", "evidence": "diagnosisnya tidak enak badan", "expected": null}
+  ]
+}

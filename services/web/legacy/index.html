@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MedVoice</title>
+<style>
+  :root { --bg:#f6f7f9; --fg:#1b1f24; --muted:#667085; --line:#d8dce2; --ok:#12805c; --warn:#b54708; --bad:#b42318; --card:#fff; --accent:#175cd3; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:14px/1.45 system-ui, sans-serif; background:var(--bg); color:var(--fg); }
+  header { padding:10px 16px; background:#101828; color:#fff; display:flex; gap:12px; align-items:center; }
+  header h1 { font-size:16px; margin:0; flex:1; }
+  main { padding:16px; max-width:1500px; margin:0 auto; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:14px; margin-bottom:14px; }
+  label { display:block; margin:8px 0 3px; font-weight:600; }
+  input[type=text], input[type=password] { width:100%; padding:7px 9px; border:1px solid var(--line); border-radius:6px; }
+  button { padding:7px 14px; border:1px solid var(--line); background:#fff; border-radius:6px; cursor:pointer; }
+  button.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+  button:disabled { opacity:.45; cursor:not-allowed; }
+  .hidden { display:none !important; }
+  .banner { padding:9px 12px; border-radius:6px; margin-bottom:10px; background:#fff4e5; border:1px solid #fec84b; color:#7a2e0e; }
+  .banner.bad { background:#fef3f2; border-color:#fda29b; color:var(--bad); }
+  .grid { display:grid; grid-template-columns: 1.3fr 1fr; gap:14px; align-items:start; }
+  .tscroll { max-height:340px; overflow-y:auto; padding-right:6px; }
+  @media (max-width:1000px){ .grid { grid-template-columns:1fr; } }
+  .col h2 { font-size:14px; margin:0 0 8px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+  .sec { margin-bottom:12px; }
+  .sec h3 { margin:0 0 4px; font-size:15px; }
+  .sent { display:flex; gap:6px; margin-bottom:4px; align-items:flex-start; padding:4px; border-radius:6px; border:1px solid transparent; }
+  .sent.flagged { background:#fffaeb; border-color:#fec84b; }
+  .sent.suspicion { background:#f9f5ff; border-color:#d6bbfb; }
+  .sent.active { outline:2px solid var(--accent); }
+  .sent textarea { flex:1; border:1px solid var(--line); border-radius:6px; padding:5px 7px; font:inherit; resize:vertical; min-height:30px; }
+  .badge { font-size:11px; padding:1px 6px; border-radius:10px; border:1px solid var(--line); color:var(--muted); white-space:nowrap; }
+  .badge.diterima { color:var(--ok); border-color:var(--ok); } .badge.ditandai { color:var(--warn); border-color:var(--warn); }
+  .badge.ditolak { color:var(--bad); border-color:var(--bad); }
+  .item { padding:6px; border-bottom:1px solid var(--line); cursor:pointer; }
+  .item small { color:var(--muted); display:block; }
+
+  .chat { display:flex; flex-direction:column; gap:7px; }
+  .bubble { max-width:78%; padding:7px 11px; border-radius:16px; line-height:1.35; word-wrap:break-word; }
+  .bubble .meta { font-size:11px; color:var(--muted); margin-bottom:1px; }
+  .bubble.dokter { align-self:flex-start; background:#dbeafe; border-bottom-left-radius:4px; }
+  .bubble.pasien { align-self:flex-end; background:#ede9fe; border-bottom-right-radius:4px; }
+  .bubble.tidak_diketahui { align-self:center; background:#eef0f3; max-width:90%; }
+  .bubble.refined .meta::after { content:" · diperhalus"; color:#12805c; }
+  .bubble.partial { font-style:italic; opacity:.7; }
+  .bubble.pending { opacity:.55; font-style:italic; }
+  .bubble.live { opacity:.85; animation:pop .25s ease-out; }
+  .bubble.hl { outline:2px solid #f59e0b; background:#fef0c7; }
+  @keyframes pop { from { transform:translateY(6px); opacity:0; } to { transform:none; opacity:.85; } }
+
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .muted { color:var(--muted); }
+  body.embed header { display:none; } body.embed main { padding:8px; }
+  select { width:100%; padding:7px 9px; border:1px solid var(--line); border-radius:6px; }
+</style>
+</head>
+<body>
+<header><h1>MedVoice &mdash; Review SOAP</h1><span id="who" class="muted"></span><button id="btnLogout" class="hidden">Keluar</button></header>
+<main>
+  <div id="msg"></div>
+
+  <section id="vLogin" class="card" style="max-width:420px">
+    <h2>Login dokter</h2>
+    <label>Rumah sakit (client)</label><input id="lClient" type="text" autocomplete="organization">
+    <label>Username</label><input id="lUser" type="text" autocomplete="username">
+    <label>Password</label><input id="lPass" type="password" autocomplete="current-password">
+    <p><button id="btnLogin" class="primary">Masuk</button></p>
+  </section>
+
+  <section id="vStart" class="card hidden" style="max-width:520px">
+    <h2>Mulai sesi</h2>
+    <label>No. rawat</label><input id="sRawat" type="text">
+    <label>Dicatat oleh (nama petugas)</label><input id="sBy" type="text">
+    <label><input id="sConsent" type="checkbox"> Pasien telah memberi persetujuan (consent) untuk perekaman suara</label>
+    <p class="row"><button id="btnStart" class="primary">Mulai sesi &amp; rekam</button></p>
+    <hr>
+    <label>Atau buka sesi yang sudah ada (ID)</label>
+    <div class="row"><input id="sOpen" type="text" style="flex:1"><button id="btnOpen">Buka</button></div>
+  </section>
+
+  <section id="vRecord" class="card hidden" style="max-width:520px">
+    <h2>Perekaman</h2>
+    <p id="recState" class="muted">Siap.</p>
+    <label style="display:flex;gap:6px;align-items:center;margin-top:0"><input id="livePreview" type="checkbox" checked> Tampilkan pratinjau percakapan langsung (matikan bila laptop terasa berat; hasil akhir tetap dibuat)</label>
+    <label style="margin-top:0">Mode pratinjau</label><select id="liveMode"><option value="cepat" selected>Cepat (teks muncul +/-2 dtk setelah kalimat; ejaan kasar)</option><option value="akurat">Akurat (+/-5 dtk setelah kalimat; lebih tepat, bisa tertinggal bila CPU sibuk)</option></select>
+    <label>Mikrofon dokter</label><select id="devDokter"></select>
+    <label>Mikrofon pasien (opsional)</label><select id="devPasien"></select>
+    <p class="muted">Dua mikrofon: label pembicara pasti. Satu mikrofon: pembicara tidak diketahui, sehingga diagnosis ditandai untuk konfirmasi dokter.</p>
+    <div id="liveBox" class="hidden"><label>Percakapan langsung (pratinjau: muncul cepat, lalu diperhalus; belum final)</label><div id="liveHint" class="muted" style="margin:4px 0"></div><div id="liveChat" class="chat tscroll"></div></div>
+    <div class="row"><button id="btnRec" class="primary">Mulai rekam</button><button id="btnStop" disabled>Selesai</button></div>
+    <hr>
+    <label>Atau unggah file audio rekaman (tanpa bicara langsung)</label>
+    <p class="muted" style="margin:0 0 6px">Dua file (dokter + pasien) = label pembicara pasti. Satu file campuran = pembicara tidak diketahui. Format: wav, mp3, m4a, ogg, webm, flac.</p>
+    <label>Dokter</label><input id="fDokter" type="file" accept="audio/*">
+    <label>Pasien</label><input id="fPasien" type="file" accept="audio/*">
+    <label>ATAU satu file campuran</label><input id="fMixed" type="file" accept="audio/*">
+    <p><button id="btnUpload">Unggah &amp; proses</button></p>
+  </section>
+
+  <section id="vProcessing" class="card hidden"><h2>Memproses...</h2><p id="procState" class="muted"></p><div id="procChat" class="chat tscroll hidden" style="max-height:420px"></div></section>
+
+  <section id="vReview" class="hidden">
+    <div id="notices"></div>
+    <div class="card row">
+      <button id="btnSave">Simpan perubahan</button>
+      <label class="row" style="margin:0"><input id="ack" type="checkbox"> Saya sudah meninjau kalimat bertanda</label>
+      <button id="btnApprove" class="primary">Approve</button>
+      <button id="btnSubmit" disabled>Kirim ke SIMRS</button>
+      <span id="stat" class="muted"></span>
+    </div>
+    <div class="card col" id="transcriptCard">
+      <h2>1. Transkrip suara (hasil pengenalan ucapan)</h2>
+      <p class="muted" style="margin:0 0 8px">Periksa dulu bagian ini. Bila teks <b>tidak sesuai ucapan</b> berarti kesalahan ada di pengenalan suara (STT). Bila teks sudah benar tetapi SOAP/butir di bawah salah, kesalahan ada di ekstraksi.</p>
+      <div id="transcript" class="tscroll chat"></div>
+    </div>
+    <div class="grid">
+      <div class="col card"><h2>2. SOAP</h2><div id="soap"></div></div>
+      <div class="col card"><h2>Butir ekstraksi</h2><div id="items"></div><h2 style="margin-top:14px">Usulan kode</h2><div id="codes"></div><h2 style="margin-top:14px">Terlewat</h2><div id="missed"></div></div>
+    </div>
+  </section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

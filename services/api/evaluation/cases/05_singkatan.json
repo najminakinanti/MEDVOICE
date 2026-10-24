@@ -1,0 +1,71 @@
+{
+ "id": "05_singkatan",
+ "tags": [
+  "singkatan"
+ ],
+ "annotated_by": "SIMULASI (belum dianotasi dokter)",
+ "segments": [
+  {
+   "speaker": "dokter",
+   "start_ms": 0,
+   "end_ms": 2580,
+   "text": "TD 130/80, HR 92, RR 20, suhu 36,8 derajat."
+  },
+  {
+   "speaker": "dokter",
+   "start_ms": 2580,
+   "end_ms": 5520,
+   "text": "GDS 210 mg/dL. CBC nanti kita ulang minggu depan."
+  },
+  {
+   "speaker": "dokter",
+   "start_ms": 5520,
+   "end_ms": 9540,
+   "text": "Diagnosis diabetes melitus. Mulai metformin 500 mg dua kali sehari."
+  }
+ ],
+ "gold": [
+  {
+   "field": "tanda_vital",
+   "key": "130/80",
+   "status": "dinyatakan_dokter",
+   "nama": null,
+   "dosis": null
+  },
+  {
+   "field": "tanda_vital",
+   "key": "36.8",
+   "status": "dinyatakan_dokter",
+   "nama": null,
+   "dosis": null
+  },
+  {
+   "field": "penunjang",
+   "key": "210",
+   "status": "dinyatakan_dokter",
+   "nama": null,
+   "dosis": null
+  },
+  {
+   "field": "penunjang",
+   "key": "cbc",
+   "status": "direncanakan",
+   "nama": null,
+   "dosis": null
+  },
+  {
+   "field": "diagnosis",
+   "key": "diabetes melitus",
+   "status": "dinyatakan_dokter",
+   "nama": null,
+   "dosis": null
+  },
+  {
+   "field": "obat",
+   "key": "metformin",
+   "status": "dinyatakan_dokter",
+   "nama": "metformin",
+   "dosis": "500 mg"
+  }
+ ]
+}
