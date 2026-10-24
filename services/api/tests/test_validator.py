@@ -223,6 +223,70 @@ def test_awalan_label_prompt_dibuang_dari_bukti():
     assert V(items2[0], s).verdict == "ditolak"
 
 
+def test_json_terpotong_diselamatkan_sampai_butir_sampah_pertama():
+    from app.extraction import ParseError, parse_llm_json, salvage_items
+    ok = ('{"field":"obat","teks":"x","nama":"amlodipine","dosis":"5 mg","status":"dinyatakan_dokter",'
+          '"bukti":"amlodipine 5 mg","segmen":[1]}')
+    sampah = '{"field":"status","teks":"belum perlu","nama":null,"dosis":null,"status":"direncanakan",'
+    raw = '{"items":[' + ok + ',' + ok.replace("amlodipine", "metformin") + ',' + sampah    # terpotong di tengah butir sampah
+    try:
+        parse_llm_json(raw)
+        raise AssertionError("seharusnya ParseError")
+    except ParseError:
+        pass
+    got = salvage_items(raw)
+    assert [i.nama for i in got] == ["amlodipine", "metformin"]
+    assert salvage_items("bukan json") == []
+    assert salvage_items('{"items":[{"field":"status"') == []
+
+
+def test_potongan_rusak_dibelah_dan_dicoba_lagi(monkeypatch):
+    import json
+    import re
+
+    from app import extraction, llm
+    ss = [Segment(i, i * 1000, i * 1000 + 900, "tidak_diketahui", f"kalimat {i}") for i in range(16)]
+    lebar = []
+
+    def fake(system, user, json_mode=True, model=None):
+        ids = [int(m) for m in re.findall(r"^\[(\d+)\]", user, re.M)]
+        lebar.append(len(ids))
+        if len(ids) > 8:
+            return "rusak total"            # potongan penuh gagal, belahannya (8 segmen) berhasil
+        return json.dumps({"items": [{"field": "keluhan_lain", "teks": "x", "status": "dilaporkan_pasien",
+                                      "bukti": f"kalimat {ids[0]}", "segmen": [ids[0]]}]})
+    monkeypatch.setattr(llm, "call_llm", fake)
+    monkeypatch.setattr(extraction, "get_settings", lambda: type("S", (), {"extract_chunk_segments": 0, "extract_chunk_overlap": 0})())
+    r = extraction.extract(ss)
+    assert not r["manual"] and len(r["items"]) == 2 and r["dropped"] == 0
+    assert lebar == [16, 8, 8]              # gagal tanpa yang selamat -> langsung dibelah jadi 2x8
+
+
+def _obat(nama, dosis, bukti):
+    s = segs(("dokter", bukti))
+    return V(Item("obat", "dinyatakan_dokter", bukti, [0], bukti, nama, dosis), s)
+
+
+def test_dosis_salah_dengar_ditandai_bukan_diterima():
+    # kasus nyata dari STT: "500 mg" terdengar "50 ml", "20 mg" jadi "20 ml", "500 mg" jadi "500 ml"
+    r = _obat("metformin", "50 ml", "metformin 50ml 2x sehari")
+    assert r.verdict == "ditandai" and {"satuan_ml_untuk_obat_tablet", "dosis_di_luar_rentang_lazim"} <= set(r.reasons)
+    assert "satuan_ml_untuk_obat_tablet" in _obat("omeprazole", "20 ml", "omeprazole 20ml 1x sehari").reasons
+    r = _obat("parasetamol", "500 ml", "boleh minum parasetamol 500ml")
+    assert r.verdict == "ditandai" and "satuan_ml_untuk_dosis_besar_mungkin_mg" in r.reasons
+
+
+def test_dosis_wajar_tidak_ditandai():
+    for nama, dosis, bukti in [("metformin", "500 mg", "metformin 500 mg dua kali sehari"),
+                               ("amlodipine", "5 mg", "amlodipine 5 mg pagi hari"),
+                               ("omeprazole", "20 mg", "omeprazole 20 mg satu kali sehari"),
+                               ("paracetamol", "500 mg", "paracetamol 500 mg maksimal tiga kali sehari"),
+                               ("antasida", "1 sdm", "antasida 1 sdm tiga kali sehari"),   # sirup: satuan ml/sdm sah, obat di luar tabel
+                               ("sirup batuk", "5 ml", "sirup batuk 5 ml tiga kali sehari")]:
+        r = _obat(nama, dosis, bukti)
+        assert r.verdict == "diterima", (nama, r.reasons)
+
+
 def test_soap_obat_gabungan_dengan_dosis_di_teks_tidak_diberi_label_kosong():
     out = compose([SI("o", "obat", "dinyatakan_dokter", "omeprazole 20 mg dan antasida 1 sendok makan", nama=None, dosis=None)])
     assert "dosis tidak disebutkan" not in [s.text for s in out if s.evidence_item_ids][0]

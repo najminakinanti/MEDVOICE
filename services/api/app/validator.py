@@ -28,6 +28,45 @@ DOSE_FORMAT = re.compile(
 NUMBER = re.compile(r"\d+(?:\.\d+)?")
 
 
+# Rentang dosis TUNGGAL lazim (mg) untuk obat umum; HANYA untuk menandai butir yang mencurigakan (mis. salah dengar
+# "500 mg" -> "50 ml"), bukan pedoman klinis. Perkiraan kasar: perlu ditinjau apoteker/dokter sebelum diandalkan.
+DOSE_RANGES_MG = {
+    "paracetamol": (250, 1000), "parasetamol": (250, 1000),
+    "metformin": (250, 1000),
+    "amlodipine": (2.5, 10), "amlodipin": (2.5, 10),
+    "omeprazole": (10, 40), "omeprazol": (10, 40),
+    "captopril": (6.25, 100), "simvastatin": (5, 80),
+    "cetirizine": (5, 10), "cetirizin": (5, 10),
+    "ibuprofen": (200, 800),
+    "amoxicillin": (250, 1000), "amoksisilin": (250, 1000),
+}
+TABLET_ONLY = {"metformin", "amlodipine", "amlodipin", "omeprazole", "omeprazol", "captopril", "simvastatin"}
+ML_BIG = 30     # dosis oral > 30 ml hampir pasti salah satuan
+
+
+def dose_flags(nama: str | None, dosis: str | None, ev: str) -> list[str]:
+    """Alasan penanda untuk dosis yang tak masuk akal. `ev` sudah ternormalisasi."""
+    m = DOSE_FORMAT.search(normalize(dosis)) if dosis else None
+    m = m or DOSE_FORMAT.search(ev)
+    if not m:
+        return []
+    val = float(NUMBER.search(m.group()).group())
+    unit = re.search(r"[a-zµ]+$", m.group()).group()
+    out = []
+    if unit == "ml" and val > ML_BIG:
+        out.append("satuan_ml_untuk_dosis_besar_mungkin_mg")
+    n = normalize(nama or "")
+    for drug, (lo, hi) in DOSE_RANGES_MG.items():
+        if drug not in n:
+            continue
+        if unit == "ml" and drug in TABLET_ONLY:
+            out.append("satuan_ml_untuk_obat_tablet")
+        if unit in ("mg", "ml") and not lo <= val <= hi:
+            out.append("dosis_di_luar_rentang_lazim")
+        break
+    return list(dict.fromkeys(out))
+
+
 def normalize(s: str) -> str:
     s = unicodedata.normalize("NFKC", s).lower()
     s = re.sub(r"(?<=\d),(?=\d)", ".", s)
@@ -184,6 +223,10 @@ def validate_item(item: Item, tr: Transcript) -> ItemResult:
         elif DOSE_FORMAT.search(ev):
             flagged = True
             reasons.append("bukti_memuat_dosis_tapi_dosis_kosong")
+        extra = dose_flags(item.nama, item.dosis, ev)
+        if extra:
+            flagged = True
+            reasons.extend(extra)
 
     # --- siapa yang mengucapkan: pertanyaan dokter bukan keluhan pasien (hanya bila pembicara diketahui) ---
     speakers_all = {x.speaker for x in segs}

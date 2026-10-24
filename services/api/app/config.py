@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     llm_api_key: str = ""
     llm_timeout_s: int = 300
     llm_num_ctx: int = 8192
+    llm_max_tokens: int = 2048          # batas keluaran per panggilan: model kecil bisa mengulang JSON tanpa henti sampai timeout
+    extract_chunk_segments: int = 24     # ekstraksi per potongan transkrip (LLM kecil kewalahan pada konsultasi panjang); 0 = sekali jalan
+    extract_chunk_overlap: int = 4       # segmen tumpang tindih antar potongan agar pasangan tanya-jawab tidak terpotong
 
     embedding_model: str = "bge-m3"
     embedding_dim: int = 1024
@@ -34,6 +37,7 @@ class Settings(BaseSettings):
     audio_dir: str = "/audio"
     max_audio_mb: int = 200
     transcript_retention_days: int = 30
+    keep_audio: bool = False           # HANYA dev/data simulasi: simpan audio ke audio_dir/_kept/<sesi> untuk diagnosis STT. Produksi: false
     vocab_dir: str = "config"
 
     gpu_timeshare: bool = False        # gilir VRAM: bongkar LLM saat merekam, bongkar STT sebelum LLM bekerja

@@ -18,14 +18,14 @@ def call_llm(system: str, user: str, *, json_mode: bool = True, model: str | Non
     try:
         if s.llm_backend == "ollama":
             body = {"model": model, "stream": False, "messages": messages,
-                    "options": {"temperature": 0, "num_ctx": s.llm_num_ctx}}
+                    "options": {"temperature": 0, "num_ctx": s.llm_num_ctx, "num_predict": s.llm_max_tokens}}
             if json_mode:
                 body["format"] = "json"
             r = httpx.post(s.llm_base_url.rstrip("/") + "/api/chat", json=body, timeout=s.llm_timeout_s)
             r.raise_for_status()
             return r.json()["message"]["content"]
         if s.llm_backend == "openai":
-            body = {"model": model, "temperature": 0, "messages": messages}
+            body = {"model": model, "temperature": 0, "max_tokens": s.llm_max_tokens, "messages": messages}
             if json_mode:
                 body["response_format"] = {"type": "json_object"}
             headers = {"Authorization": f"Bearer {s.llm_api_key}"} if s.llm_api_key else {}

@@ -61,7 +61,13 @@ def stage_stt(session_id: str, client_id: str) -> tuple[str, bool]:
                     merged.append({**seg, "speaker": speaker})
     finally:
         if d.exists():
-            shutil.rmtree(d, ignore_errors=True)   # audio asli dihapus setelah STT (berhasil atau tidak)
+            if s.keep_audio:                       # dev saja (KEEP_AUDIO=true): pindahkan, jangan hapus
+                keep = Path(s.audio_dir) / "_kept" / session_id
+                keep.parent.mkdir(parents=True, exist_ok=True)
+                shutil.rmtree(keep, ignore_errors=True)
+                shutil.move(d.as_posix(), keep.as_posix())
+            else:
+                shutil.rmtree(d, ignore_errors=True)   # audio asli dihapus setelah STT (berhasil atau tidak)
     if s.gpu_timeshare:
         stt_client.unload()          # lepas VRAM sebelum LLM memuat model
     merged.sort(key=lambda x: (x["start_ms"], x["end_ms"]))
@@ -78,9 +84,10 @@ def stage_stt(session_id: str, client_id: str) -> tuple[str, bool]:
                 "VALUES (:t,:i,:a,:b,:sp,:tx)"),
                 dict(t=tid, i=i, a=seg["start_ms"], b=max(seg["end_ms"], seg["start_ms"]),
                      sp=seg["speaker"], tx=seg["text"].strip()))
-        c.execute(text("UPDATE consult_sessions SET audio_deleted_at=now() WHERE id=:s"), dict(s=session_id))
-        audit(c, action="audio.deleted", actor_type="system", client_id=client_id, session_id=session_id,
-              after={"files": len(files)})
+        if not s.keep_audio:
+            c.execute(text("UPDATE consult_sessions SET audio_deleted_at=now() WHERE id=:s"), dict(s=session_id))
+        audit(c, action="audio.kept_dev" if s.keep_audio else "audio.deleted", actor_type="system",
+              client_id=client_id, session_id=session_id, after={"files": len(files)})
     return str(tid), empty
 
 
