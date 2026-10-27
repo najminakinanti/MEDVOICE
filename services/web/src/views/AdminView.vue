@@ -1,31 +1,35 @@
-<script setup>
-// Halaman admin belum memiliki API di engine: pengelolaan klien/dokter/kunci/webhook dilakukan lewat CLI admin.
-// Ditampilkan jujur sebagai panduan, bukan formulir yang tidak berfungsi.
+﻿<script setup>
+// Halaman admin RS. Layar utama mengikuti Figma "09 Â· Admin": dua kolom (Pengguna | Integrasi SIMRS + Data & Privasi).
+// Halaman Integrasi SIMRS dan Pengaturan tetap ada sebagai halaman detail. Superadmin: daftar rumah sakit + pengguna per rumah sakit.
+// Profil sendiri ada di menu "Profil Saya" (semua peran).
 import { computed } from "vue";
 import { useRoute } from "vue-router";
+import { isSuperadmin } from "../api.js";
 import AppShell from "../components/AppShell.vue";
+import AdminIntegration from "./admin/AdminIntegration.vue";
+import AdminSettings from "./admin/AdminSettings.vue";
+import AdminSystem from "./admin/AdminSystem.vue";
+import AdminUsers from "./admin/AdminUsers.vue";
+import IntegrationSummary from "./admin/IntegrationSummary.vue";
+import PrivacySummary from "./admin/PrivacySummary.vue";
+import SuperadminUsers from "./admin/SuperadminUsers.vue";
 
 const route = useRoute();
-const PAGES = {
-  pengguna: { title: "Pengguna & Poli", cmds: ["create-doctor <client> <username> <simrs_user_id> \"<nama>\"", "create-client <nama> --origin https://web.rs.example"], note: "Dokter dan klien (rumah sakit) dibuat lewat CLI admin." },
-  integrasi: { title: "Integrasi SIMRS", cmds: ["create-key <client> --label simrs", "revoke-key <prefix>", "set-webhook <client> https://simrs.rs.example/hook", "webhook-secret <client>"], note: "Kunci API, webhook, dan adapter SIMRS diatur lewat CLI admin; adapter dipilih per klien (--adapter)." },
-  pengaturan: { title: "Pengaturan", cmds: ["purge"], note: "Retensi transkrip/audio dan model diatur lewat variabel lingkungan (.env); 'purge' menghapus transkrip kedaluwarsa." },
-};
-const page = computed(() => PAGES[route.params.page] || PAGES.pengguna);
+const page = computed(() => (["integrasi", "pengaturan", "sistem"].includes(route.params.page) ? route.params.page : "pengguna"));
+const title = computed(() => ({ integrasi: "Integrasi SIMRS", pengaturan: "Pengaturan", sistem: "Sistem" }[page.value] || (isSuperadmin() ? "Pengguna & Rumah Sakit" : "Pengguna & Pengaturan")));
 </script>
 
 <template>
-  <AppShell :title="page.title" crumb="Admin RS" :search="false">
-    <section class="card box">
-      <h2 class="h2">Belum tersedia di antarmuka</h2>
-      <p class="muted">{{ page.note }} Jalankan di server engine:</p>
-      <pre><code v-for="c in page.cmds" :key="c">docker compose exec api python -m app.admin {{ c }}
-</code></pre>
-    </section>
+  <AppShell :title="title" crumb="Admin RS" :search="false">
+    <template v-if="page === 'pengguna'">
+      <SuperadminUsers v-if="isSuperadmin()" />
+      <div v-else class="adm-split">
+        <div class="adm-main"><AdminUsers /></div>
+        <aside class="adm-side"><IntegrationSummary /><PrivacySummary /></aside>
+      </div>
+    </template>
+    <AdminIntegration v-else-if="page === 'integrasi'" />
+    <AdminSystem v-else-if="page === 'sistem'" />
+    <AdminSettings v-else />
   </AppShell>
 </template>
-
-<style scoped>
-.box { padding: 24px; max-width: 760px; display: grid; gap: 12px; }
-pre { margin: 0; padding: 14px 16px; background: var(--bg); border-radius: var(--radius-sm); overflow-x: auto; font-size: 13px; line-height: 1.7; }
-</style>

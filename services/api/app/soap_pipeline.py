@@ -72,7 +72,9 @@ def stage_stt(session_id: str, client_id: str) -> tuple[str, bool]:
         stt_client.unload()          # lepas VRAM sebelum LLM memuat model
     merged.sort(key=lambda x: (x["start_ms"], x["end_ms"]))
     empty = len(merged) == 0
-    purge_after = datetime.now(timezone.utc) + timedelta(days=s.transcript_retention_days)
+    with engine().begin() as _c:                      # retensi per RS (Pengaturan > Data & Privasi) atau bawaan server
+        days = _c.execute(text("SELECT retention_days FROM clients WHERE id=:c"), dict(c=client_id)).scalar() or s.transcript_retention_days
+    purge_after = datetime.now(timezone.utc) + timedelta(days=days)
     with engine().begin() as c:
         tid = c.execute(text(
             "INSERT INTO transcripts(client_id, session_id, stt_model, language, is_empty, purge_after) "
@@ -285,14 +287,16 @@ def _notify(session_id: str) -> None:
         log.error("webhook_enqueue_failed error=%s", type(e).__name__)
 
 
-def purge_expired() -> dict:
-    """Hapus transkrip yang lewat masa retensi + sisa audio basi (>24 jam). Return ringkasan jumlah."""
+def purge_expired(client_id: str | None = None) -> dict:
+    """Hapus transkrip yang lewat masa retensi + sisa audio basi (>24 jam). Return ringkasan jumlah.
+    Dengan client_id: hanya transkrip RS itu (dipakai halaman admin RS); penyapuan audio basi (lintas RS) dilewati."""
     s = get_settings()
     purged = 0
     with engine().begin() as c:
         rows = c.execute(text(
             "SELECT t.id, t.client_id, t.session_id FROM transcripts t "
-            "WHERE t.purged_at IS NULL AND t.purge_after < now()")).all()
+            "WHERE t.purged_at IS NULL AND t.purge_after < now() AND (CAST(:c AS uuid) IS NULL OR t.client_id = :c)"),
+            dict(c=client_id)).all()
         for tid, cid, sid in rows:
             c.execute(text("DELETE FROM transcript_segments WHERE transcript_id=:t"), dict(t=tid))
             c.execute(text("UPDATE transcripts SET purged_at=now() WHERE id=:t"), dict(t=tid))
@@ -301,7 +305,7 @@ def purge_expired() -> dict:
             purged += 1
     stale = 0
     base = Path(s.audio_dir)
-    if base.exists():
+    if client_id is None and base.exists():
         cutoff = datetime.now().timestamp() - 24 * 3600
         for d in base.iterdir():
             if d.is_dir() and d.stat().st_mtime < cutoff:

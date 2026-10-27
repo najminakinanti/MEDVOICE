@@ -46,11 +46,11 @@ def new_api_key() -> tuple[str, str, str]:
     return key, key[:8], hash_api_key(key)
 
 
-def make_token(doctor_id: str, client_id: str, session_id: str | None = None, ttl_s: int | None = None) -> str:
+def make_token(user_id: str, client_id: str, session_id: str | None = None, ttl_s: int | None = None) -> str:
     """JWT dokter. Dengan session_id: token widget yang hanya berlaku untuk SATU sesi."""
     s = get_settings()
     now = int(time.time())
-    claims = {"sub": doctor_id, "cid": client_id, "iat": now, "exp": now + (ttl_s or s.jwt_ttl_minutes * 60)}
+    claims = {"sub": user_id, "cid": client_id, "iat": now, "exp": now + (ttl_s or s.jwt_ttl_minutes * 60)}
     if session_id:
         claims["sid"] = session_id
     return jwt.encode(claims, s.jwt_secret, algorithm="HS256")

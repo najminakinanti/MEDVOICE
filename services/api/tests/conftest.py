@@ -65,7 +65,7 @@ def tenant(db):
         docs = {}
         for u in ("dr_a", "dr_b"):
             docs[u] = c.execute(text(
-                "INSERT INTO doctors(client_id, simrs_user_id, username, password_hash, display_name) "
+                "INSERT INTO users(client_id, simrs_user_id, username, password_hash, display_name) "
                 "VALUES (:c,:u,:u,:p,:u) RETURNING id"),
                 dict(c=cid, u=u, p=security.hash_password("passwordku-123"))).scalar()
     return {"name": name, "id": str(cid), "key": key, "doctors": docs}

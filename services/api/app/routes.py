@@ -31,9 +31,9 @@ def _later(bg: BackgroundTasks, session_id: str, event: str) -> None:
 
 # ---------------------------------------------------------------- auth
 class LoginIn(BaseModel):
-    client: str
-    username: str
+    username: str                 # email atau NIP dokter (nama pengguna lama tetap diterima)
     password: str
+    client: str | None = None     # opsional: RS otomatis dari akun dokter; dipakai hanya untuk mempersempit pencarian
 
 
 @router.post("/auth/login")
@@ -41,17 +41,22 @@ def login(body: LoginIn, request: Request, conn=Depends(get_conn)):
     ip = request.client.host if request.client else "?"
     if not ratelimit.allow(f"login:{ip}", get_settings().login_rate_per_min):
         raise HTTPException(429, "rate_limited")
-    row = conn.execute(text(
-        "SELECT d.id, d.password_hash, c.id FROM doctors d JOIN clients c ON c.id=d.client_id "
-        "WHERE c.name=:c AND d.username=:u AND d.active AND c.active"),
-        dict(c=body.client, u=body.username)).first()
+    ident = body.username.strip()
+    rows = conn.execute(text(
+        "SELECT d.id, d.password_hash, c.id, c.session_minutes FROM users d JOIN clients c ON c.id=d.client_id "
+        "WHERE d.active AND c.active AND (CAST(:c AS text) IS NULL OR c.name=:c) "
+        "AND (lower(d.email)=lower(:u) OR d.nip=:u OR d.username=:u) LIMIT 2"),
+        dict(c=body.client or None, u=ident)).all()
+    row = rows[0] if len(rows) == 1 else None      # tak ditemukan / identitas ganda di beberapa RS -> ditolak (tak menebak RS)
     ok = security.verify_password(body.password, row[1] if row else None)
     if not row or not ok:
-        audit(conn, action="auth.login_failed", actor_type="dokter", actor_id=body.username, ip=ip)
+        # akun dikenal tapi kata sandi salah -> tercatat di RS-nya (admin RS bisa melihat percobaan masuk yang gagal)
+        audit(conn, action="auth.login_failed", actor_type="dokter", actor_id=body.username, client_id=row[2] if row else None, ip=ip)
         return JSONResponse({"detail": "invalid_credentials"}, status_code=401)   # bukan raise: audit tetap ter-commit
     audit(conn, action="auth.login", actor_type="dokter", actor_id=row[0], client_id=row[2], ip=ip)
-    ttl = get_settings().jwt_ttl_minutes * 60
-    return {"access_token": security.make_token(str(row[0]), str(row[2])), "token_type": "bearer", "expires_in": ttl}
+    conn.execute(text("UPDATE users SET last_login_at=now() WHERE id=:i"), dict(i=row[0]))
+    ttl = (row[3] or get_settings().jwt_ttl_minutes) * 60              # masa sesi per RS (Pengaturan > Keamanan) atau bawaan server
+    return {"access_token": security.make_token(str(row[0]), str(row[2]), ttl_s=ttl), "token_type": "bearer", "expires_in": ttl}
 
 
 # ---------------------------------------------------------------- sesi
@@ -79,12 +84,12 @@ def create_session(body: SessionIn, p: Principal = Depends(get_principal), conn=
     if not body.consent.given:
         raise HTTPException(422, "consent_required")
     if p.kind == "doctor":
-        doctor_id, simrs_id = p.doctor_id, p.doctor_simrs_id
+        user_id, simrs_id = p.user_id, p.doctor_simrs_id
     else:
         if not body.doctor:
             raise HTTPException(422, "doctor_required_for_api_key")
-        doctor_id = conn.execute(text(
-            "INSERT INTO doctors(client_id, simrs_user_id, username, display_name) VALUES (:c,:s,:s,:n) "
+        user_id = conn.execute(text(
+            "INSERT INTO users(client_id, simrs_user_id, username, display_name) VALUES (:c,:s,:s,:n) "
             "ON CONFLICT (client_id, simrs_user_id) DO UPDATE SET display_name=EXCLUDED.display_name "
             "RETURNING id"), dict(c=p.client_id, s=body.doctor.simrs_user_id, n=body.doctor.display_name)).scalar()
         simrs_id = body.doctor.simrs_user_id
@@ -97,12 +102,12 @@ def create_session(body: SessionIn, p: Principal = Depends(get_principal), conn=
         if used >= p.monthly_quota:
             raise HTTPException(429, "monthly_quota_exceeded")
     sid = conn.execute(text(
-        "INSERT INTO consult_sessions(client_id, doctor_id, no_rawat, consent_at, consent_by, consent_note) "
+        "INSERT INTO consult_sessions(client_id, user_id, no_rawat, consent_at, consent_by, consent_note) "
         "VALUES (:c,:d,:n, now(), :cb, :cn) RETURNING id"),
-        dict(c=p.client_id, d=doctor_id, n=body.no_rawat, cb=body.consent.recorded_by,
+        dict(c=p.client_id, d=user_id, n=body.no_rawat, cb=body.consent.recorded_by,
              cn=body.consent.note)).scalar()
     audit(conn, action="session.create", actor_type="dokter" if p.kind == "doctor" else "api_client",
-          actor_id=doctor_id if p.kind == "doctor" else p.client_id, client_id=p.client_id, session_id=sid,
+          actor_id=user_id if p.kind == "doctor" else p.client_id, client_id=p.client_id, session_id=sid,
           entity="consult_sessions", entity_id=sid, after={"consent": True}, ip=p.ip)
     return {"id": str(sid), "status": "recording"}
 
@@ -175,7 +180,7 @@ async def upload_audio(session_id: str, dokter: UploadFile | None = File(None), 
     if not saved:
         raise HTTPException(422, "no_audio_file")
     audit(conn, action="audio.upload", actor_type="dokter" if p.kind == "doctor" else "api_client",
-          actor_id=p.doctor_id or p.client_id, client_id=p.client_id, session_id=session_id,
+          actor_id=p.user_id or p.client_id, client_id=p.client_id, session_id=session_id,
           after={"channels": list(saved)}, ip=p.ip)
     return {"received": list(saved)}
 
@@ -190,7 +195,7 @@ def finish(session_id: str, bg: BackgroundTasks, p: Principal = Depends(get_prin
         conn.execute(text("INSERT INTO jobs(client_id, session_id, kind) VALUES (:c,:s,:k)"),
                      dict(c=p.client_id, s=session_id, k=kind))
     audit(conn, action="session.finish", actor_type="dokter" if p.kind == "doctor" else "api_client",
-          actor_id=p.doctor_id or p.client_id, client_id=p.client_id, session_id=session_id, ip=p.ip)
+          actor_id=p.user_id or p.client_id, client_id=p.client_id, session_id=session_id, ip=p.ip)
     from .worker import run_pipeline_task
     bg.add_task(run_pipeline_task.delay, session_id)    # setelah commit
     return {"status": "processing", "jobs": _jobs(conn, session_id)}
@@ -270,7 +275,7 @@ def review(session_id: str, p: Principal = Depends(require_doctor), conn=Depends
     if tr and tr[2]:
         notices.append("transkrip_sudah_dihapus_sesuai_retensi")
     sid = _latest_soap_id(conn, session_id)
-    audit(conn, action="review.view", actor_type="dokter", actor_id=p.doctor_id, client_id=p.client_id,
+    audit(conn, action="review.view", actor_type="dokter", actor_id=p.user_id, client_id=p.client_id,
           session_id=session_id, ip=p.ip)
     return {"session": {"id": session_id, "status": s["status"], "no_rawat": s["no_rawat"], **_session_meta(conn, p, s)},
             "transcript": {"segments": segs, "is_empty": bool(tr and tr[1])}, "items": items,
@@ -303,7 +308,7 @@ def save_soap(session_id: str, body: SoapIn, p: Principal = Depends(require_doct
     ver = conn.execute(text("SELECT COALESCE(MAX(version),0)+1 FROM soap_notes WHERE session_id=:s"), dict(s=session_id)).scalar()
     nid = conn.execute(text(
         "INSERT INTO soap_notes(client_id, session_id, version, source, created_by) VALUES (:c,:s,:v,'dokter',:d) RETURNING id"),
-        dict(c=p.client_id, s=session_id, v=ver, d=p.doctor_id)).scalar()
+        dict(c=p.client_id, s=session_id, v=ver, d=p.user_id)).scalar()
     stats = {"unchanged": 0, "edited": 0, "new": 0, "deleted": 0}
     kept: set[str] = set()
     by_section = {k: [] for k in "SOAP"}
@@ -334,7 +339,7 @@ def save_soap(session_id: str, body: SoapIn, p: Principal = Depends(require_doct
                 dict(so=nid, sec=sec, i=n, t=t, ev="{" + ",".join(str(x) for x in ev) + "}", sus=sus, fl=flagged,
                      o=origin, ai=ai_text))
     stats["deleted"] = sum(1 for k, r in prev.items() if k not in kept and r[2] != EMPTY_TEXT)
-    audit(conn, action="soap.edit", actor_type="dokter", actor_id=p.doctor_id, client_id=p.client_id,
+    audit(conn, action="soap.edit", actor_type="dokter", actor_id=p.user_id, client_id=p.client_id,
           session_id=session_id, entity="soap_notes", entity_id=nid, before={"version": ver - 1},
           after={"version": ver, **stats}, ip=p.ip)
     return _soap_payload(conn, nid)
@@ -364,9 +369,9 @@ def approve(session_id: str, body: ApproveIn, bg: BackgroundTasks, p: Principal 
     flagged = conn.execute(text("SELECT count(*) FROM soap_sentences WHERE soap_id=:i AND flagged"), dict(i=latest)).scalar()
     if flagged and not body.acknowledge_flagged:
         raise HTTPException(409, "flagged_not_acknowledged")
-    conn.execute(text("UPDATE soap_notes SET approved_by=:d, approved_at=now() WHERE id=:i"), dict(d=p.doctor_id, i=latest))
+    conn.execute(text("UPDATE soap_notes SET approved_by=:d, approved_at=now() WHERE id=:i"), dict(d=p.user_id, i=latest))
     conn.execute(text("UPDATE consult_sessions SET status='approved' WHERE id=:s"), dict(s=session_id))
-    audit(conn, action="soap.approve", actor_type="dokter", actor_id=p.doctor_id, client_id=p.client_id,
+    audit(conn, action="soap.approve", actor_type="dokter", actor_id=p.user_id, client_id=p.client_id,
           session_id=session_id, entity="soap_notes", entity_id=latest,
           after={"flagged_acknowledged": int(flagged)}, ip=p.ip)
     _later(bg, session_id, "session.approved")
@@ -394,13 +399,13 @@ def set_code(session_id: str, suggestion_id: str, body: CodeIn, p: Principal = D
         raise HTTPException(404, "suggestion_not_found")
     if body.code is None:
         conn.execute(text("UPDATE code_suggestions SET final_code=NULL, state='kosong', decided_by=:d, decided_at=now() WHERE id=:i"),
-                     dict(d=p.doctor_id, i=suggestion_id))
+                     dict(d=p.user_id, i=suggestion_id))
     else:
         if not term.code_exists(conn, row[0], body.code.strip()):
             raise HTTPException(422, "code_not_in_terminology")
         conn.execute(text("UPDATE code_suggestions SET final_code=:c, state='dipilih_dokter', decided_by=:d, decided_at=now() WHERE id=:i"),
-                     dict(c=body.code.strip(), d=p.doctor_id, i=suggestion_id))
-    audit(conn, action="code.set", actor_type="dokter", actor_id=p.doctor_id, client_id=p.client_id, session_id=session_id,
+                     dict(c=body.code.strip(), d=p.user_id, i=suggestion_id))
+    audit(conn, action="code.set", actor_type="dokter", actor_id=p.user_id, client_id=p.client_id, session_id=session_id,
           entity="code_suggestions", entity_id=suggestion_id, before={"code": row[1]}, after={"code": body.code}, ip=p.ip)
     return next(c for c in _codes_payload(conn, session_id) if c["id"] == suggestion_id)
 
@@ -415,24 +420,22 @@ def search_terminology(system: str, q: str, limit: int = 10, p: Principal = Depe
     return [{"code": r["code"], "display": r["display"]} for r in res]
 
 
-@router.post("/sessions/{session_id}/submit")
-def submit(session_id: str, bg: BackgroundTasks, p: Principal = Depends(get_principal), conn=Depends(get_conn)):
-    s = load_session(conn, p, session_id)
-    done = conn.execute(text("SELECT id FROM simrs_submissions WHERE session_id=:s AND status='succeeded'"), dict(s=session_id)).first()
-    if done:
-        return {"status": "submitted", "submission_id": str(done[0]), "idempotent": True}
-    if s["status"] != "approved":
-        raise HTTPException(409, "not_approved")
+def do_submit(conn, *, client_id: str, adapter_name: str, s: dict, actor_type: str, actor_id: str, ip: str | None,
+              action: str = "simrs.submit"):
+    """Kirim SOAP yang SUDAH disetujui dokter ke SIMRS lewat adapter, catat hasilnya (simrs_submissions + audit).
+    Dipakai endpoint submit (dokter/API key) dan tombol Kirim ulang di halaman Integrasi SIMRS (admin).
+    Return (hasil adapter, id pengiriman). Pemanggil wajib memastikan sesi berstatus approved dan belum berhasil terkirim."""
+    session_id = str(s["id"])
     soap_id = conn.execute(text("SELECT id FROM soap_notes WHERE session_id=:s AND approved_at IS NOT NULL "
                                 "ORDER BY version DESC LIMIT 1"), dict(s=session_id)).scalar()
     if not soap_id:
         raise HTTPException(409, "not_approved")
-    doctor_simrs = conn.execute(text("SELECT simrs_user_id FROM doctors WHERE id=:d"), dict(d=s["doctor_id"])).scalar()
+    doctor_simrs = conn.execute(text("SELECT simrs_user_id FROM users WHERE id=:d"), dict(d=s["user_id"])).scalar()
     sentences = _soap_payload(conn, soap_id)["sentences"]
     payload = {k: [x["text"] for x in sentences if x["section"] == k] for k in "SOAP"}
     payload["codes"] = [{"system": c["system"], "code": c["final_code"], "display": c["final_display"]}
                         for c in _codes_payload(conn, session_id) if c["final_code"]]
-    adapter = get_adapter(p.simrs_adapter)
+    adapter = get_adapter(adapter_name)
     try:
         res = adapter.submit_soap(no_rawat=s["no_rawat"], doctor_simrs_id=doctor_simrs, soap=payload,
                                   idempotency_key=str(soap_id))
@@ -442,13 +445,26 @@ def submit(session_id: str, bg: BackgroundTasks, p: Principal = Depends(get_prin
     sub = conn.execute(text(
         "INSERT INTO simrs_submissions(client_id, session_id, soap_id, adapter, status, response_code, error_code) "
         "VALUES (:c,:s,:so,:a,:st,:rc,:ec) RETURNING id"),
-        dict(c=p.client_id, s=session_id, so=soap_id, a=adapter.name, st="succeeded" if res.ok else "failed",
+        dict(c=client_id, s=session_id, so=soap_id, a=adapter.name, st="succeeded" if res.ok else "failed",
              rc=res.http_status, ec=res.error_code)).scalar()
-    audit(conn, action="simrs.submit", actor_type="dokter" if p.kind == "doctor" else "api_client",
-          actor_id=p.doctor_id or p.client_id, client_id=p.client_id, session_id=session_id,
-          entity="simrs_submissions", entity_id=sub, after={"ok": res.ok, "error_code": res.error_code}, ip=p.ip)
+    audit(conn, action=action, actor_type=actor_type, actor_id=actor_id, client_id=client_id, session_id=session_id,
+          entity="simrs_submissions", entity_id=sub, after={"ok": res.ok, "error_code": res.error_code}, ip=ip)
     if res.ok:
         conn.execute(text("UPDATE consult_sessions SET status='submitted' WHERE id=:s"), dict(s=session_id))
+    return res, sub
+
+
+@router.post("/sessions/{session_id}/submit")
+def submit(session_id: str, bg: BackgroundTasks, p: Principal = Depends(get_principal), conn=Depends(get_conn)):
+    s = load_session(conn, p, session_id)
+    done = conn.execute(text("SELECT id FROM simrs_submissions WHERE session_id=:s AND status='succeeded'"), dict(s=session_id)).first()
+    if done:
+        return {"status": "submitted", "submission_id": str(done[0]), "idempotent": True}
+    if s["status"] != "approved":
+        raise HTTPException(409, "not_approved")
+    res, sub = do_submit(conn, client_id=p.client_id, adapter_name=p.simrs_adapter, s=s,
+                         actor_type="dokter" if p.kind == "doctor" else "api_client", actor_id=p.user_id or p.client_id, ip=p.ip)
+    if res.ok:
         _later(bg, session_id, "session.submitted")
         return {"status": "submitted", "submission_id": str(sub)}
     return JSONResponse({"detail": "simrs_submit_failed", "error_code": res.error_code}, status_code=502)
@@ -484,7 +500,7 @@ def widget_token(session_id: str, p: Principal = Depends(get_principal), conn=De
         raise HTTPException(403, "api_key_required")
     s = load_session(conn, p, session_id)
     ttl = 3600
-    tok = security.make_token(str(s["doctor_id"]), p.client_id, session_id=str(session_id), ttl_s=ttl)
+    tok = security.make_token(str(s["user_id"]), p.client_id, session_id=str(session_id), ttl_s=ttl)
     audit(conn, action="widget.token_issued", actor_type="api_client", actor_id=p.client_id, client_id=p.client_id,
           session_id=session_id, ip=p.ip)
     return {"token": tok, "expires_in": ttl, "ui_path": f"/ui/?embed=1#session={session_id}&token={tok}"}

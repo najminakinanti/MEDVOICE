@@ -53,7 +53,7 @@ async function start() {
       </div>
     </div>
 
-    <p class="body">Percakapan akan direkam dan diubah menjadi teks untuk membantu dokter menyusun rekam medis. Audio dihapus sesuai kebijakan retensi rumah sakit, dan hasil AI selalu ditinjau dokter.</p>
+    <p class="body">{{ auth.me?.consent_text || "Percakapan akan direkam dan diubah menjadi teks untuk membantu dokter menyusun rekam medis. Audio dihapus sesuai kebijakan retensi rumah sakit, dan hasil AI selalu ditinjau dokter." }}</p>
 
     <label class="check"><input v-model="agreed" type="checkbox" /><span>Pasien/wali sudah dijelaskan dan menyetujui perekaman</span></label>
     <label class="check"><input v-model="byGuardian" type="checkbox" /><span>Persetujuan diberikan oleh wali (bukan pasien)</span></label>

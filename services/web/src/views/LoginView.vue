@@ -1,27 +1,28 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { Eye, EyeOff, Lock, Mail, Mic, FileText, ShieldCheck, Server, Building2 } from "lucide-vue-next";
-import { ApiError, errText, login } from "../api.js";
+import { Eye, EyeOff, Lock, Mail, Mic, FileText, ShieldCheck, Server } from "lucide-vue-next";
+import { ApiError, errText, homePath, login } from "../api.js";
 import Logo from "../components/Logo.vue";
+import heroLogo from "../assets/logo-hero.png";   // versi untuk latar gelap (teks putih)
 
 const router = useRouter(), route = useRoute();
 const REM = "mv.login";
-const client = ref(""), user = ref(""), pass = ref(""), remember = ref(true), show = ref(false), busy = ref(false), err = ref(""), hint = ref(false);
+const user = ref(""), pass = ref(""), remember = ref(true), show = ref(false), busy = ref(false), err = ref(""), hint = ref(false);
 
 onMounted(() => {
-  try { const s = JSON.parse(localStorage.getItem(REM) || "{}"); client.value = s.client || ""; user.value = s.user || ""; } catch { /* abaikan */ }
+  try { const s = JSON.parse(localStorage.getItem(REM) || "{}"); user.value = s.user || ""; } catch { /* abaikan */ }
 });
 
 async function submit() {
   err.value = ""; busy.value = true;
   try {
-    await login(client.value.trim(), user.value.trim(), pass.value);
+    await login(user.value.trim(), pass.value);
     pass.value = "";
-    try { remember.value ? localStorage.setItem(REM, JSON.stringify({ client: client.value.trim(), user: user.value.trim() })) : localStorage.removeItem(REM); } catch { /* mode privat */ }
-    router.replace(typeof route.query.next === "string" && route.query.next.startsWith("/") ? route.query.next : "/queue");
+    try { remember.value ? localStorage.setItem(REM, JSON.stringify({ user: user.value.trim() })) : localStorage.removeItem(REM); } catch { /* mode privat */ }
+    router.replace(typeof route.query.next === "string" && route.query.next.startsWith("/") ? route.query.next : homePath());
   } catch (e) {
-    err.value = e instanceof ApiError && e.status === 401 ? "Rumah sakit, akun, atau kata sandi salah." : e instanceof ApiError ? errText(e) : "Tidak dapat terhubung ke server.";
+    err.value = e instanceof ApiError && e.status === 401 ? "Email/NIP atau kata sandi salah." : e instanceof ApiError ? errText(e) : "Tidak dapat terhubung ke server.";
   } finally { busy.value = false; }
 }
 </script>
@@ -29,7 +30,12 @@ async function submit() {
 <template>
   <div class="login">
     <section class="hero">
-      <div class="top"><span class="sq"><Logo mark-only :size="0.55" /></span> MedVoice · AI Clinical Documentation</div>
+      <div class="deco" aria-hidden="true">
+        <i class="circ ring r1"></i><i class="circ ring r2"></i><i class="circ ring r3"></i>
+        <i class="circ orb o1"></i><i class="circ orb o2"></i><i class="circ orb o3"></i>
+        <i class="circ dot d1"></i><i class="circ dot d2"></i><i class="circ dot d3"></i>
+      </div>
+      <div class="top"><img class="hero-logo" :src="heroLogo" alt="MedVoice — AI Clinical Documentation" /></div>
       <div class="copy">
         <h1>Dokter fokus ke pasien, dokumentasi ditulis otomatis.</h1>
         <p>Percakapan konsultasi berubah jadi catatan SOAP lengkap dengan kode ICD-10 &amp; ICD-9-CM, siap dikirim ke SIMRS.</p>
@@ -48,10 +54,6 @@ async function submit() {
         <h2 class="h1 c">Masuk ke akun Anda</h2>
         <p class="muted c sub">Gunakan akun rumah sakit Anda</p>
 
-        <div class="field">
-          <label for="lc">Rumah sakit</label>
-          <div class="in"><Building2 :size="16" /><input id="lc" v-model="client" class="input" required autocomplete="organization" placeholder="Kode rumah sakit" /></div>
-        </div>
         <div class="field">
           <label for="lu">Email atau NIP</label>
           <div class="in"><Mail :size="16" /><input id="lu" v-model="user" class="input" required autocomplete="username" placeholder="anisa.putri@rsmedika.co.id" /></div>
@@ -77,9 +79,28 @@ async function submit() {
 
 <style scoped>
 .login { display: grid; grid-template-columns: 640px 1fr; min-height: 100%; background: var(--surface); }
-.hero { background: var(--grad-hero); color: #fff; padding: 56px; display: flex; flex-direction: column; justify-content: space-between; }
-.top { display: flex; align-items: center; gap: 12px; font-weight: 600; }
-.sq { display: inline-grid; place-items: center; width: 52px; height: 44px; border-radius: 10px; background: #fff; }
+.hero { position: relative; overflow: hidden; background: var(--grad-hero); color: #fff; padding: 56px; display: flex; flex-direction: column; justify-content: space-between; }
+.hero > :not(.deco) { position: relative; z-index: 1; }
+
+/* hiasan lingkaran: murni dekorasi, transparan agar teks tetap terbaca */
+.deco { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.circ { position: absolute; display: block; border-radius: 50%; animation: drift 14s ease-in-out infinite; }
+.ring { border: 3px solid rgba(255, 255, 255, .30); }
+.r1 { width: 420px; height: 420px; top: -150px; right: -140px; }
+.r2 { width: 260px; height: 260px; top: -70px; right: -60px; border-color: rgba(255, 255, 255, .20); animation-duration: 18s; }
+.r3 { width: 300px; height: 300px; bottom: -110px; right: 30px; border-color: rgba(190, 168, 255, .55); animation-duration: 20s; animation-delay: -6s; }
+.orb { background: radial-gradient(circle at 30% 28%, rgba(176, 150, 255, .85), rgba(91, 63, 200, 0) 72%); }
+.o1 { width: 360px; height: 360px; bottom: -150px; left: -120px; animation-duration: 16s; }
+.o2 { width: 150px; height: 150px; top: 46%; right: 36px; background: radial-gradient(circle at 30% 28%, rgba(255, 255, 255, .30), rgba(255, 255, 255, 0) 74%); animation-duration: 12s; animation-delay: -3s; }
+.o3 { width: 90px; height: 90px; top: 30%; left: -26px; background: radial-gradient(circle at 30% 28%, rgba(190, 168, 255, .8), rgba(155, 127, 232, 0) 74%); animation-duration: 10s; animation-delay: -5s; }
+.dot { background: rgba(255, 255, 255, .55); }
+.d1 { width: 16px; height: 16px; bottom: 120px; right: 90px; animation-duration: 9s; }
+.d2 { width: 12px; height: 12px; top: 22%; right: 64px; background: rgba(190, 168, 255, .95); animation-duration: 11s; animation-delay: -2s; }
+.d3 { width: 14px; height: 14px; bottom: 150px; left: 40%; animation-duration: 13s; animation-delay: -7s; }
+@keyframes drift { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+@media (prefers-reduced-motion: reduce) { .circ { animation: none; } }
+.top { display: flex; align-items: center; }
+.hero-logo { display: block; width: 240px; max-width: 100%; height: auto; }
 .copy h1 { font-size: 40px; line-height: 1.15; font-weight: 700; letter-spacing: -.01em; max-width: 480px; }
 .copy p { margin-top: 20px; font-size: 16px; line-height: 1.65; max-width: 520px; color: rgba(255,255,255,.92); }
 .copy ul { list-style: none; padding: 0; margin: 28px 0 0; display: grid; gap: 14px; }

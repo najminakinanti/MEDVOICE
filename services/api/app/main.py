@@ -4,9 +4,11 @@ from fastapi import FastAPI, Request
 from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 
+from .admin_api import router as admin_router
 from .config import get_settings, require_secrets
 from .deps import known_origins
 from .live_ws import router as live_router
+from .platform_api import router as platform_router
 from .routes import router
 from .ui_api import router as ui_router
 
@@ -54,6 +56,8 @@ async def cors(request: Request, call_next):
 
 app.include_router(router)
 app.include_router(ui_router)
+app.include_router(admin_router)
+app.include_router(platform_router)
 app.include_router(live_router)
 
 _ui = Path(__file__).parent / "static"

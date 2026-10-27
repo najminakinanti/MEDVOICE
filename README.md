@@ -29,14 +29,22 @@ Build image `stt`/`api` lambat (unduh ulang paket pip). Cukup infrastruktur di D
 Skrip membaca `.env`, mengganti nama host Docker (`postgres`, `redis`, `ollama`, `stt`) ke `localhost`, dan memakai cache Hugging Face host untuk model Whisper. Perubahan Python aktif setelah restart skrip.
 
 ### Frontend (Vue 3 + Vite), `services/web`
-UI mengikuti desain Figma "MedVoice – UI MVP" (login, antrean, consent, rekam + transkrip langsung, hasil: transkrip/info klinis/SOAP/kode, kirim SIMRS, riwayat, mobile rekam). Hasil build dilayani engine di `/ui/` (`services/api/app/static`, jangan diedit tangan).
+UI mengikuti desain Figma "MedVoice – UI MVP" (layar admin mengikuti frame "09 · Admin"; bagian yang belum punya dasar di sistem, yaitu poli/unit, redaksi data pribadi, dan undangan email, tidak dipalsukan di UI) (login, antrean, consent, rekam + transkrip langsung, hasil: transkrip/info klinis/SOAP/kode, kirim SIMRS, riwayat, mobile rekam). Hasil build dilayani engine di `/ui/` (`services/api/app/static`, jangan diedit tangan).
 ```bash
 cd services/web && npm install
 npm run dev        # hot reload di http://localhost:5173/ui/  (meneruskan /v1 + WebSocket ke engine :8000)
 npm run build      # tulis ke ../api/app/static
 npm test           # uji pendeteksi ucapan (node:test)
 ```
-UI lama (vanilla JS) disimpan di `services/web/legacy/` hanya sebagai arsip; tidak dilayani. Logo pada UI adalah pendekatan SVG; ganti dengan berkas resmi dari Figma di `src/components/Logo.vue`. Halaman Admin (Pengguna/Integrasi/Pengaturan) belum punya API: menampilkan perintah CLI admin.
+UI lama (vanilla JS) disimpan di `services/web/legacy/` hanya sebagai arsip; tidak dilayani. Logo pada UI adalah pendekatan SVG; ganti dengan berkas resmi dari Figma di `src/components/Logo.vue`. Halaman **Admin RS** (menu hanya untuk `admin` dan `superadmin`):
+- *Pengguna*: kelola pengguna, atur ulang kata sandi, jabatan; layar dua kolom mengikuti Figma (Pengguna | Integrasi ringkas + Data & Privasi). Superadmin melihat daftar rumah sakit + pengguna per RS.
+- *Integrasi SIMRS* (3 tab): **Koneksi & pengiriman** (adapter, uji koneksi tersimpan, riwayat pengiriman + *Kirim ulang* idempoten), **Webhook** (URL, rahasia, event, log pengiriman), **Kunci API & origin**. ID dokter di SIMRS diisi lewat form *Ubah data* pengguna.
+- *Pengaturan* (2 tab): **Data & Privasi** (masa simpan transkrip, teks persetujuan pasien, masa sesi login; per RS) dan **Log audit** (filter, cari, ekspor CSV aman dari injeksi rumus).
+- *Sistem* (hanya superadmin): status STT/LLM/GPU, tabel terminologi, nilai bawaan server.
+Login memakai email atau NIP; rumah sakit otomatis dari akun. **Tiga peran** (daftarnya ada di tabel `roles`: kode, label, cakupan `hospital`/`platform`, urutan; hak akses sebenarnya ditegakkan kode, bukan tabel; pengguna juga punya kolom `title` = jabatan bebas seperti *Dokter Umum*/*Sp.PD* untuk tampilan):
+- `dokter`: hanya menu klinis (Antrean, Sesi Aktif, Riwayat, Profil); bagian *Admin RS* tidak muncul dan API admin menjawab 403.
+- `admin` (admin RS): semua menu, plus *Pengguna*, *Integrasi SIMRS*, *Pengaturan* untuk **rumah sakitnya sendiri** (pengguna RS lain tak terlihat).
+- `superadmin` (pengelola platform): semua menu; di *Pengguna* ada **data rumah sakit** (buat/nonaktifkan RS, batas dan kuota) dan **pengguna per rumah sakit**. Akunnya hidup di client khusus `medvoice-platform`, sehingga alur klinisnya (antrean, sesi) berjalan di client itu; sesi dokter RS lain tetap tak bisa dibuka (sesi hanya terlihat oleh pemiliknya). Superadmin pertama dibuat lewat CLI: `python -m app.admin create-superadmin "Nama" --email ... --password-env PW`. Akun pertama tiap RS dijadikan admin oleh migrasi 0007; RS baru dibuat superadmin lewat halaman *Rumah Sakit* (otomatis dengan satu admin), lalu admin RS menambah dokter di halaman *Pengguna*.
 
 ### Transkrip langsung (WebSocket)
 Browser → `WS /v1/sessions/{id}/live/ws` (token dikirim sebagai pesan pertama, bukan di URL) → engine meneruskan ke `WS stt:/stream`. Detektor ucapan di browser (AudioWorklet 16 kHz) mengirim PCM16 hanya saat ada suara; layanan STT mengirim **teks sementara** (model `STT_PARTIAL_MODEL`, kata stabil tebal + sisa abu-abu) lalu **teks akhir** (`STT_STREAM_FINAL_MODEL`, default `STT_REFINE_MODEL`) yang menggantikannya. Dua pekerja paralel (teks akhir vs sementara) dan "terbaru yang menang" mencegah antrean menumpuk. Tetap hanya pratinjau: tidak disimpan; SOAP dari rekaman penuh. `POST /sessions/{id}/live` lama masih ada.
@@ -102,6 +110,11 @@ Begitu tabelnya termuat, pipeline otomatis ikut memetakan obat→KFA, penunjang�
 | `POST /sessions/{id}/approve` | **dokter** | wajib versi dokter; kalimat bertanda perlu `acknowledge_flagged` |
 | `POST /sessions/{id}/submit` | dokter / API key | kirim lewat adapter SIMRS (hanya bila approved; idempoten) |
 | `POST /sessions/{id}/widget-token` | **API key** | token widget 1 jam, hanya untuk satu sesi |
+| `GET/POST/PUT /admin/users…`, `/admin/integration…`, `/admin/settings…` | **admin RS** | pengelolaan pengguna, integrasi SIMRS, pengaturan; hanya menyentuh RS milik admin, tiap perubahan masuk `audit_log` |
+| `GET/POST/PUT /platform/hospitals…` | **superadmin** | daftar/buat/atur RS (aktif, batas, kuota) dan kelola pengguna RS mana pun; tanpa data klinis; tercatat di `audit_log` RS terdampak |
+| `GET /admin/audit`, `/admin/audit.csv`, `/admin/integration/submissions` (+`/{id}/retry`), `/admin/integration/webhook-log`, `PUT /admin/settings/privacy`, `/admin/settings/security` | **admin RS** | log audit RS, riwayat & kirim ulang SIMRS, log webhook, pengaturan per RS |
+| `GET /platform/system` | **superadmin** | status teknis server (STT/LLM/GPU/terminologi) |
+| `POST /me/password` | **dokter** | ganti kata sandi sendiri (wajib kata sandi saat ini) |
 
 **Webhook**: `python -m app.admin set-webhook CLIENT URL`, `webhook-secret CLIENT`. Event `session.processed|approved|submitted`; payload hanya id+status; header `X-MedVoice-Signature: sha256=HMAC(secret, "<timestamp>.<body>")`; retry 5×.
 **Widget**: server RS memanggil `widget-token` (API key tak pernah ke browser) lalu halaman memuat `/ui/widget.js` → `MedVoice.mount(...)`; lihat `/ui/widget-demo.html`. Origin yang boleh menyematkan = `--origin` client.

@@ -19,10 +19,10 @@ def conn():
 def _seed(c):
     cl = c.execute("INSERT INTO clients(name) VALUES ('rs-uji') RETURNING id").fetchone()[0]
     dr = c.execute(
-        "INSERT INTO doctors(client_id, simrs_user_id, username, display_name) "
+        "INSERT INTO users(client_id, simrs_user_id, username, display_name) "
         "VALUES (%s,'D1','dr1','dr. Uji') RETURNING id", (cl,)).fetchone()[0]
     se = c.execute(
-        "INSERT INTO consult_sessions(client_id, doctor_id, no_rawat, consent_at, consent_by) "
+        "INSERT INTO consult_sessions(client_id, user_id, no_rawat, consent_at, consent_by) "
         "VALUES (%s,%s,'2026/01/01/000001', now(), 'perawat') RETURNING id", (cl, dr)).fetchone()[0]
     return cl, dr, se
 
@@ -36,7 +36,7 @@ def test_consent_required(conn):
     cl, dr, _ = _seed(conn)
     with pytest.raises(psycopg.errors.NotNullViolation):
         conn.execute(
-            "INSERT INTO consult_sessions(client_id, doctor_id, no_rawat, consent_by) "
+            "INSERT INTO consult_sessions(client_id, user_id, no_rawat, consent_by) "
             "VALUES (%s,%s,'X','p')", (cl, dr))
 
 

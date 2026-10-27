@@ -31,6 +31,18 @@ def main(argv=None) -> int:
     d.add_argument("simrs_user_id")
     d.add_argument("display_name")
     d.add_argument("--password-env", help="nama env var berisi password; kosong = prompt")
+    d.add_argument("--email", help="email login dokter (unik di seluruh sistem)")
+    d.add_argument("--nip", help="NIP login dokter (unik di seluruh sistem)")
+    sa = sub.add_parser("create-superadmin", help="buat akun superadmin (pengelola platform) di client platform")
+    sa.add_argument("display_name")
+    sa.add_argument("--email")
+    sa.add_argument("--nip")
+    sa.add_argument("--password-env", help="nama env var berisi password; kosong = prompt")
+    sl = sub.add_parser("set-doctor-login", help="atur email/NIP login untuk dokter yang sudah ada")
+    sl.add_argument("client")
+    sl.add_argument("username")
+    sl.add_argument("--email")
+    sl.add_argument("--nip")
     w = sub.add_parser("set-webhook")
     w.add_argument("client")
     w.add_argument("url")
@@ -72,11 +84,42 @@ def main(argv=None) -> int:
             if not pw or len(pw) < 10:
                 sys.exit("password minimal 10 karakter")
             did = conn.execute(text(
-                "INSERT INTO doctors(client_id, simrs_user_id, username, password_hash, display_name) "
-                "VALUES (:c,:s,:u,:p,:n) RETURNING id"),
-                dict(c=cid, s=a.simrs_user_id, u=a.username, p=security.hash_password(pw), n=a.display_name)).scalar()
-            audit(conn, action="admin.create_doctor", actor_type="system", client_id=cid, entity="doctors", entity_id=did)
+                "INSERT INTO users(client_id, simrs_user_id, username, password_hash, display_name, email, nip) "
+                "VALUES (:c,:s,:u,:p,:n,:e,:i) RETURNING id"),
+                dict(c=cid, s=a.simrs_user_id, u=a.username, p=security.hash_password(pw), n=a.display_name,
+                     e=(a.email or "").strip() or None, i=(a.nip or "").strip() or None)).scalar()
+            audit(conn, action="admin.create_doctor", actor_type="system", client_id=cid, entity="users", entity_id=did)
             print("dokter dibuat:", did)
+        elif a.cmd == "create-superadmin":
+            import os
+            email, nip = (a.email or "").strip().lower() or None, (a.nip or "").strip() or None
+            if not (email or nip):
+                sys.exit("isi --email dan/atau --nip")
+            pw = os.environ.get(a.password_env) if a.password_env else getpass.getpass("Password: ")
+            if not pw or len(pw) < 10:
+                sys.exit("password minimal 10 karakter")
+            cid = conn.execute(text("SELECT id FROM clients WHERE is_platform")).scalar()
+            if not cid:
+                sys.exit("client platform tidak ada: jalankan migrasi (alembic upgrade head)")
+            username = (email.split("@")[0] if email else nip)
+            did = conn.execute(text(
+                "INSERT INTO users(client_id, simrs_user_id, username, password_hash, display_name, email, nip, role) "
+                "VALUES (:c,:u,:u,:p,:n,:e,:i,'superadmin') RETURNING id"),
+                dict(c=cid, u=username, p=security.hash_password(pw), n=a.display_name, e=email, i=nip)).scalar()
+            audit(conn, action="admin.create_superadmin", actor_type="system", client_id=cid, entity="users", entity_id=did)
+            print("superadmin dibuat:", did)
+        elif a.cmd == "set-doctor-login":
+            if not (a.email or a.nip):
+                sys.exit("isi --email dan/atau --nip")
+            cid = client_id(a.client)
+            did = conn.execute(text(
+                "UPDATE users SET email=COALESCE(:e, email), nip=COALESCE(:i, nip) "
+                "WHERE client_id=:c AND username=:u RETURNING id"),
+                dict(c=cid, u=a.username, e=(a.email or "").strip() or None, i=(a.nip or "").strip() or None)).scalar()
+            if not did:
+                sys.exit("dokter tidak ditemukan")
+            audit(conn, action="admin.set_doctor_login", actor_type="system", client_id=cid, entity="users", entity_id=did)
+            print("login dokter diatur:", did)
         elif a.cmd == "set-webhook":
             cid = client_id(a.client)
             conn.execute(text("UPDATE clients SET webhook_url=:u WHERE id=:c"), dict(u=a.url, c=cid))
