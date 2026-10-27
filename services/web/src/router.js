@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import { auth, canAdmin, homePath, isSuperadmin } from "./api.js";
+import { auth, canAdmin, homePath } from "./api.js";
 
 // Hash history: StaticFiles(html=True) di /ui tidak punya fallback SPA, dan fragmen tidak terkirim ke server/log.
 export const router = createRouter({
@@ -23,5 +23,4 @@ router.beforeEach((to) => {
   if (to.path === "/login") return homePath();
   // Penjaga UI per peran (server tetap menegakkan 403; ini hanya merapikan tampilan): bagian /admin hanya untuk admin RS & superadmin.
   if (to.path.startsWith("/admin") && !canAdmin()) return "/queue";
-  if (to.path === "/admin/sistem" && !isSuperadmin()) return "/admin/pengguna";      // status teknis server = urusan pengelola platform
 });

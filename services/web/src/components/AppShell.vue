@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { Bell, ChevronRight, History, LayoutGrid, LogOut, Menu, Mic, Search, Server, SlidersHorizontal, Stethoscope, UserRound, Users, Link2 } from "lucide-vue-next";
+import { Bell, ChevronRight, History, LayoutGrid, LogOut, Menu, Mic, Search,SlidersHorizontal, Stethoscope, UserRound, Users, Link2 } from "lucide-vue-next";
 import { ROLE_LABEL, auth, canAdmin, isSuperadmin, logout } from "../api.js";
 import { app } from "../store.js";
 import { initials } from "../format.js";
@@ -29,7 +29,6 @@ const admin = computed(() => [
   { to: "/admin/pengguna", icon: Users, label: "Pengguna & Profil" },
   { to: "/admin/integrasi", icon: Link2, label: "Integrasi SIMRS" },
   { to: "/admin/pengaturan", icon: SlidersHorizontal, label: "Pengaturan" },
-  ...(isSuperadmin() ? [{ to: "/admin/sistem", icon: Server, label: "Sistem" }] : []),     // status teknis server: hanya superadmin
 ].map((i) => ({ ...i, on: route.path === i.to })));
 
 function submit() {

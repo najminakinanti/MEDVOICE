@@ -1,4 +1,4 @@
-import{c}from"./Logo-pex2ByNW.js";/**
+import{c}from"./Logo-42hSq-xw.js";/**
  * @license lucide-vue-next v0.460.0 - ISC
  *
  * This source code is licensed under the ISC license.
