@@ -12,4 +12,20 @@
   --shadow-pop: 0 12px 40px rgba(14, 26, 46, 0.18);
   --sidebar-w: 248px; --topbar-h: 68px;
   --font: "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --heading: var(--navy-900); --banner-warn-ink: #7a4300; --banner-bad-ink: #8f1d1d; --ok-ink: #0b6b36;
+  color-scheme: light;
+}
+
+/* Mode gelap: menimpa token yang sama, sehingga seluruh komponen ikut berubah. */
+:root[data-theme="dark"] {
+  --navy-900: #3d3478;
+  --purple-800: #cbbcf5; --purple-700: #cbbcf5; --purple-600: #7a5ce0; --purple-500: #9b7fe8;
+  --purple-400: #9b7fe8; --purple-200: #4a3d85; --purple-100: #2f2657; --purple-50: #241c47;
+  --ink: #ece9f8; --muted: #aaa4c6; --subtle: #807a9e; --border: #302858; --bg: #130f26; --surface: #1c1636;
+  --success: #34c576; --success-bg: #16302a; --warning: #f0a23b; --warning-bg: #33281a;
+  --danger: #ef6a6a; --danger-bg: #381c2a; --info: #4aa3ee; --info-bg: #1a2a4a; --teal: #3cc6c0; --teal-bg: #163238;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-pop: 0 12px 40px rgba(0, 0, 0, 0.55);
+  --heading: #fff; --banner-warn-ink: #f5c27a; --banner-bad-ink: #f5a3a3; --ok-ink: #7be0a6;
+  color-scheme: dark;
 }

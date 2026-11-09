@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import "@fontsource-variable/inter";
+import "./theme.js";
 import "./styles/tokens.css";
 import "./styles/base.css";
 import "./styles/admin.css";

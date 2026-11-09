@@ -209,7 +209,7 @@ const pick = (k, e) => { files.value[k] = e.target.files[0] || null; };
 .rec.mobile .time { font-size: 44px; }
 .mbar { flex: none; display: flex; justify-content: space-around; align-items: flex-end; padding: 14px 12px calc(14px + env(safe-area-inset-bottom)); border-top: 1px solid var(--border); }
 .mb { display: grid; justify-items: center; gap: 4px; border: 0; background: none; font-size: 12px; color: var(--muted); width: 80px; } .mb.ghost { visibility: hidden; }
-.mb .c { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--bg); color: var(--navy-900); }
+.mb .c { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--bg); color: var(--heading); }
 .mb .c.red { width: 72px; height: 72px; background: var(--danger); color: #fff; box-shadow: 0 0 0 8px rgba(217, 54, 54, .14); } .mb.big b { color: var(--ink); }
 @media (max-width: 1100px) { .rec:not(.mobile) { grid-template-columns: 1fr; } .side { display: none; } }
 @media (max-width: 640px) { .g2, .g3 { grid-template-columns: 1fr; } }

@@ -39,7 +39,7 @@ const parts = computed(() => {
 .row.hl { background: var(--purple-100); }
 .body { min-width: 0; flex: 1; }
 .meta { display: flex; align-items: center; gap: 8px; font-size: 13px; line-height: 1.2; margin-bottom: 4px; }
-.who { font-weight: 700; } .who.dokter { color: var(--navy-900); } .who.pasien { color: var(--teal); } .who.tidak_diketahui { color: var(--muted); }
+.who { font-weight: 700; } .who.dokter { color: var(--heading); } .who.pasien { color: var(--teal); } .who.tidak_diketahui { color: var(--muted); }
 .time { color: var(--subtle); font-size: 12px; font-variant-numeric: tabular-nums; }
 .listen { display: inline-flex; align-items: center; gap: 6px; height: 20px; padding: 0 8px; border-radius: 999px; background: var(--purple-100); color: var(--purple-600); font-size: 12px; font-weight: 600; }
 .listen i { width: 6px; height: 6px; border-radius: 50%; background: var(--purple-600); animation: pulse 1.1s ease-in-out infinite; }

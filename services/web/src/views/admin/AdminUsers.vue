@@ -19,10 +19,15 @@ const secret = ref(null), confirm = ref(null);
 const roles = computed(() => data.value?.roles || ["dokter", "admin"]);
 const EMPTY = { id: null, display_name: "", email: "", nip: "", simrs_user_id: "", role: "", title: "", password: "" };
 
+let seq = 0;
 async function load() {
+  const my = ++seq;                                          // respons lama (base/pencarian sudah berganti) tidak boleh menimpa yang baru
   loading.value = true; err.value = "";
-  try { data.value = await api(props.base + (q.value.trim() ? "?q=" + encodeURIComponent(q.value.trim()) : "")); emit("loaded", data.value); }
-  catch (e) { err.value = errText(e); } finally { loading.value = false; }
+  try {
+    const r = await api(props.base + (q.value.trim() ? "?q=" + encodeURIComponent(q.value.trim()) : ""));
+    if (my !== seq) return;
+    data.value = r; emit("loaded", r);
+  } catch (e) { if (my === seq) err.value = errText(e); } finally { if (my === seq) loading.value = false; }
 }
 let timer;
 watch(q, () => { clearTimeout(timer); timer = setTimeout(load, 250); });

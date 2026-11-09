@@ -16,7 +16,7 @@
 .adm-hint { font-size: 12px; color: var(--muted); }
 @media (max-width: 640px) { .adm-form { grid-template-columns: 1fr; } .adm-card { padding: 16px; } }
 
-.adm-ok { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: var(--radius-sm); background: var(--success-bg); color: #0b6b36; font-size: 13px; }
+.adm-ok { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: var(--radius-sm); background: var(--success-bg); color: var(--ok-ink); font-size: 13px; }
 .adm-mono { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: 13px; word-break: break-all; }
 .adm-secret { padding: 12px 14px; border-radius: var(--radius-sm); background: var(--bg); border: 1px dashed var(--purple-400); display: flex; align-items: center; gap: 10px; justify-content: space-between; }
 
@@ -43,7 +43,7 @@
 .adm-kv dd { margin: 0; font-weight: 500; min-width: 0; }
 @media (max-width: 640px) { .adm-kv { grid-template-columns: 1fr; gap: 2px; } .adm-kv dd { margin-bottom: 8px; } }
 
-.adm-modal-h { font-size: 18px; font-weight: 700; color: var(--navy-900); margin-bottom: 4px; }
+.adm-modal-h { font-size: 18px; font-weight: 700; color: var(--heading); margin-bottom: 4px; }
 .adm-modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
 .adm-textarea { width: 100%; min-height: 96px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); resize: vertical; font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: 13px; outline: none; }
 .adm-textarea:focus { border-color: var(--purple-500); box-shadow: 0 0 0 3px var(--purple-100); }

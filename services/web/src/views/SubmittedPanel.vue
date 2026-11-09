@@ -54,7 +54,7 @@ const parts = computed(() => [
 <style scoped>
 .ok { display: grid; place-items: start center; } .box { width: 100%; max-width: 620px; padding: 32px; display: grid; gap: 14px; justify-items: center; }
 .big { display: grid; place-items: center; width: 72px; height: 72px; border-radius: 50%; background: var(--success-bg); color: var(--success); } .t { text-align: center; font-size: 22px; } .c { text-align: center; }
-.kpi { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; } .kpi div { display: grid; padding: 8px 18px; background: var(--bg); border-radius: var(--radius-sm); text-align: center; } .kpi span { font-size: 12px; color: var(--muted); } .kpi b { color: var(--navy-900); }
+.kpi { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; } .kpi div { display: grid; padding: 8px 18px; background: var(--bg); border-radius: var(--radius-sm); text-align: center; } .kpi span { font-size: 12px; color: var(--muted); } .kpi b { color: var(--heading); }
 .parts { list-style: none; margin: 10px 0 0; padding: 0; width: 100%; } .parts li { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
 .pi { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 8px; background: var(--purple-100); color: var(--purple-600); flex: none; } .pt { flex: 1; display: grid; }
 .acts { display: flex; gap: 12px; width: 100%; margin-top: 10px; } .acts .btn { flex: 1; }

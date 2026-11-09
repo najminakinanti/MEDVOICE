@@ -45,7 +45,7 @@ const text = (i) => i.teks || [i.nama, i.dosis].filter(Boolean).join(" ") || i.e
 .info .ic { background: var(--info-bg); color: var(--info); } .info .lb { color: var(--info); }
 .purple .ic { background: var(--purple-100); color: var(--purple-600); } .purple .lb { color: var(--purple-600); }
 .teal .ic { background: var(--teal-bg); color: var(--teal); } .teal .lb { color: var(--teal); }
-.navy .ic { background: var(--bg); color: var(--navy-900); } .navy .lb { color: var(--navy-900); }
+.navy .ic { background: var(--bg); color: var(--heading); } .navy .lb { color: var(--heading); }
 .tx { flex: 1; min-width: 0; display: grid; gap: 1px; }
 .lb { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; flex-wrap: wrap; }
 .vl { color: var(--ink); font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; } .rs { font-size: 12px; color: var(--muted); }

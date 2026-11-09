@@ -98,7 +98,7 @@ function started(id) { consentFor.value = undefined; app.activeSessionId = id; r
 .ic { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 10px; }
 .ic.p { background: var(--purple-100); color: var(--purple-600); } .ic.g { background: var(--success-bg); color: var(--success); }
 .ic.w { background: var(--warning-bg); color: var(--warning); } .ic.b { background: var(--info-bg); color: var(--info); }
-.l { font-size: 13px; color: var(--muted); } .v { font-size: 24px; font-weight: 700; color: var(--navy-900); line-height: 1.2; }
+.l { font-size: 13px; color: var(--muted); } .v { font-size: 24px; font-weight: 700; color: var(--heading); line-height: 1.2; }
 .tbl { overflow: hidden; }
 .th { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 16px 20px; }
 .t { display: flex; align-items: baseline; gap: 8px; } .acts { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
